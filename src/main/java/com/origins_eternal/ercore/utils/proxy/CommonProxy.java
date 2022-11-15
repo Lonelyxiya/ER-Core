@@ -15,9 +15,6 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         Config.registerConfig(event);
         GameRegistry.registerWorldGenerator(new GenOres(), 0);
-        registerFluids();
-        registerFluidModels();
-        registerMaterials();
     }
     public void init(FMLInitializationEvent event) {
         registerOredicts();
