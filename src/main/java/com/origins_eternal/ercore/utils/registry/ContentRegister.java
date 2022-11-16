@@ -1,26 +1,42 @@
 package com.origins_eternal.ercore.utils.registry;
 
 import com.origins_eternal.ercore.content.block.Blocks;
+import com.origins_eternal.ercore.content.block.FluidBlocks;
 import com.origins_eternal.ercore.content.block.Ores;
+import com.origins_eternal.ercore.content.fluid.Fluids;
 import com.origins_eternal.ercore.content.item.Blueprints;
 import com.origins_eternal.ercore.content.item.Items;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.BlockFluidClassic;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import static com.origins_eternal.ercore.ERCore.ERCORE;
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
+import static com.origins_eternal.ercore.content.block.FluidBlocks.FLUIDBLOCKS;
 
 @Mod.EventBusSubscriber
-public class GameRegister {
+public class ContentRegister {
+
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         for (Block block : Blocks.BLOCKS) {
@@ -28,6 +44,9 @@ public class GameRegister {
         }
         for (Block ore : Ores.ORES) {
             event.getRegistry().register(ore);
+        }
+        for (Block fluidblock : FluidBlocks.FLUIDBLOCKS) {
+            event.getRegistry().register(fluidblock);
         }
     }
 
@@ -38,6 +57,9 @@ public class GameRegister {
         }
         for (Item print : Blueprints.PRINTS) {
             event.getRegistry().register(print);
+        }
+        for (Item fluiditem: FluidBlocks.FLUIDITEMS) {
+            event.getRegistry().register(fluiditem);
         }
     }
 
@@ -57,8 +79,30 @@ public class GameRegister {
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    public static void registerFluidModels() {
+        for (Block fluidblock : FLUIDBLOCKS) {
+            String fluidname = fluidblock.getTranslationKey().substring(12);
+            ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(fluidblock), new ItemMeshDefinition() {
+                @Nonnull
+                @Override
+                public ModelResourceLocation getModelLocation(@Nonnull ItemStack stack) {
+                    return new ModelResourceLocation(MOD_ID + ":fluid", fluidname);
+                }
+            });
+            ModelLoader.setCustomStateMapper(fluidblock, new StateMapperBase() {
+                @Nonnull
+                @Override
+                protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState state) {
+                    return new ModelResourceLocation(MOD_ID + ":fluid", fluidname);
+                }
+            });
+        }
+    }
+
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
         registerModels();
+        registerFluidModels();
     }
 }

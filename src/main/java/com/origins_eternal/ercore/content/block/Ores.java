@@ -14,5 +14,5 @@ public class Ores {
     public static final Block Rutile_Ore = new BlockCreator("Rutile_Ore", 6, 5, "pickaxe");
     public static final Block Sulphur_Ore = new BlockCreator("Sulphur_Ore", 5, 3, "pickaxe");
     public static final Block Tin_Ore = new BlockCreator("Tin_Ore", 5, 2, "pickaxe");
-    public static final Block Tungsten_ore = new BlockCreator("Tungsten_Ore", 5, 2, "pickaxe");
+    public static final Block Tungsten_ore = new BlockCreator("Tungsten_Ore", 5, 8, "pickaxe");
 }

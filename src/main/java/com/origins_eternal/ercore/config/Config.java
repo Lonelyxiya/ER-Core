@@ -1,6 +1,7 @@
 package com.origins_eternal.ercore.config;
 
 import com.origins_eternal.ercore.ERCore;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -84,5 +85,6 @@ public class Config {
     public static void registerConfig(FMLPreInitializationEvent event) {
         ERCore.config = new File(event.getModConfigurationDirectory() + "/ERCore");
         init(new File(ERCore.config.getPath(), "ERCore.cfg"));
+        MinecraftForge.EVENT_BUS.register(config);
     }
 }

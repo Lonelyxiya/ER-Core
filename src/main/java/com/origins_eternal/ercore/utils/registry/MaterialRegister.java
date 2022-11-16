@@ -2,18 +2,14 @@ package com.origins_eternal.ercore.utils.registry;
 
 import com.origins_eternal.ercore.content.fluid.Fluids;
 import com.origins_eternal.ercore.content.material.Materials;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import slimeknights.tconstruct.library.TinkerRegistry;
-import slimeknights.tconstruct.library.client.MaterialRenderInfo;
-import slimeknights.tconstruct.library.client.texture.MetalTextureTexture;
 import slimeknights.tconstruct.library.materials.*;
 
-import static com.origins_eternal.ercore.ERCore.MOD_ID;
 import static com.origins_eternal.ercore.content.item.Items.Obsidian_Magic_Shard;
 import static com.origins_eternal.ercore.content.item.Items.Tungsten_Steel_Ingot;
+import static com.origins_eternal.ercore.utils.proxy.ClientProxy.setRenderInfo;
 
 public class MaterialRegister {
     public static void addMaterials(int volume, Item item, Material material, Fluid fluid, int headDura, float headSpeed, float headAttack, float handleMod, int handleDura, int extra, int headLevel, boolean craft, boolean cast, float drawSpeed, float range, float bonusDamage) {
@@ -26,12 +22,7 @@ public class MaterialRegister {
 
         material.setFluid(fluid).setCraftable(craft).setCastable(cast).addItem(item, 1, volume);;
         material.setRepresentativeItem(item);
-        material.setRenderInfo(new MaterialRenderInfo.AbstractMaterialRenderInfo() {
-            @Override
-            public TextureAtlasSprite getTexture(ResourceLocation resourceLocation, String location) {
-                return new MetalTextureTexture(new ResourceLocation(MOD_ID + ":materials/" + material.getIdentifier()), resourceLocation, location, fluid.getColor(), 2f, 3f, 0.5f);
-            }
-        });
+        setRenderInfo(material, fluid);
     }
 
     public static void registerMaterials() {
