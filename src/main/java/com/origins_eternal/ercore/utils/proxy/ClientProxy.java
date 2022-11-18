@@ -3,6 +3,7 @@ package com.origins_eternal.ercore.utils.proxy;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import slimeknights.tconstruct.library.client.MaterialRenderInfo;
@@ -16,7 +17,9 @@ public class ClientProxy extends CommonProxy{
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-        registerMaterials();
+        if(Loader.isModLoaded("tconstruct")) {
+            registerMaterials();
+        }
     }
 
     @Override

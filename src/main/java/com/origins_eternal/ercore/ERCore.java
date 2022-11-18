@@ -12,8 +12,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 
-import static com.origins_eternal.ercore.utils.registry.MaterialRegister.registerMaterials;
-
 @Mod(modid = ERCore.MOD_ID, name = ERCore.MOD_NAME, version = ERCore.VERSION, dependencies = "after:tconstruct@[1.12-2.7.2.15,);")
 public class ERCore {
 
