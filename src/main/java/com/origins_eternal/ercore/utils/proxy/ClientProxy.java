@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import slimeknights.tconstruct.library.client.MaterialRenderInfo;
@@ -17,7 +18,7 @@ public class ClientProxy extends CommonProxy{
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-        if(Loader.isModLoaded("tconstruct")) {
+        if (Loader.isModLoaded("tconstruct")) {
             registerMaterials();
         }
     }
@@ -26,7 +27,7 @@ public class ClientProxy extends CommonProxy{
     public void init(FMLInitializationEvent event) {
         super.init(event);
     }
-
+    @Optional.Method(modid = "tconstruct")
     public static void setRenderInfo(Material material, Fluid fluid) {
         material.setRenderInfo(new MaterialRenderInfo.AbstractMaterialRenderInfo() {
             @Override
