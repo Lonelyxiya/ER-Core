@@ -5,13 +5,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import slimeknights.tconstruct.library.client.MaterialRenderInfo;
 import slimeknights.tconstruct.library.client.texture.MetalTextureTexture;
 import slimeknights.tconstruct.library.materials.Material;
 
+import java.io.IOException;
+
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
+import static com.origins_eternal.ercore.utils.GameUtils.*;
 import static com.origins_eternal.ercore.utils.registry.MaterialRegister.registerMaterials;
 
 public class ClientProxy extends CommonProxy{
@@ -21,6 +25,13 @@ public class ClientProxy extends CommonProxy{
         if (Loader.isModLoaded("tconstruct")) {
             registerMaterials();
         }
+    }
+
+    @Override
+    public void construct(FMLConstructionEvent event) throws IOException {
+        setChinese();
+        moveFiles();
+        installResourcepacks();
     }
 
     @Override

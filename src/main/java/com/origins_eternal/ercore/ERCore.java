@@ -14,8 +14,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import java.io.File;
 import java.io.IOException;
 
-import static com.origins_eternal.ercore.utils.GameUtils.*;
-
 @Mod(modid = ERCore.MOD_ID, name = ERCore.MOD_NAME, version = ERCore.VERSION, dependencies = "after:tconstruct@[1.12-2.7.2.15,);")
 public class ERCore {
 
@@ -33,11 +31,7 @@ public class ERCore {
 	static { FluidRegistry.enableUniversalBucket(); }
 
 	@EventHandler
-	public void construct(FMLConstructionEvent event) throws IOException {
-		setChinese();
-		moveFiles();
-		installResourcepacks();
-	}
+	public void construct(FMLConstructionEvent event) throws IOException { proxy.construct(event); }
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) { proxy.preInit(event); }

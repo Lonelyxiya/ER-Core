@@ -2,9 +2,12 @@ package com.origins_eternal.ercore.utils.proxy;
 
 import com.origins_eternal.ercore.config.Config;
 import com.origins_eternal.ercore.gen.GenOres;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.io.IOException;
 
 import static com.origins_eternal.ercore.utils.registry.FluidRegister.registerFluids;
 import static com.origins_eternal.ercore.utils.registry.OredictRegister.registerOredicts;
@@ -16,6 +19,11 @@ public class CommonProxy {
         GameRegistry.registerWorldGenerator(new GenOres(), 0);
         registerFluids();
     }
+
+    public void construct(FMLConstructionEvent event) throws IOException {
+
+    }
+
     public void init(FMLInitializationEvent event) {
         registerOredicts();
         registerRecipes();
