@@ -7,10 +7,14 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
+import java.io.IOException;
+
+import static com.origins_eternal.ercore.utils.GameUtils.*;
 
 @Mod(modid = ERCore.MOD_ID, name = ERCore.MOD_NAME, version = ERCore.VERSION, dependencies = "after:tconstruct@[1.12-2.7.2.15,);")
 public class ERCore {
@@ -27,6 +31,13 @@ public class ERCore {
 	public static final CreativeTabs ERCORE = new CreativeTab();
 
 	static { FluidRegistry.enableUniversalBucket(); }
+
+	@EventHandler
+	public void construct(FMLConstructionEvent event) throws IOException {
+		setChinese();
+		moveFiles();
+		installResourcepacks();
+	}
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) { proxy.preInit(event); }
