@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -38,26 +37,23 @@ public class KeyEvent {
     public static void onKeyInput(InputEvent.KeyInputEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
         EntityPlayer player = mc.player;
-        if (player.dimension != 0) {
-            EntityDataManager dataManager = player.getDataManager();
-            if (UP.isKeyDown()) {
-                checkTags(player, "U");
-            } else if (DOWN.isKeyDown()) {
-                checkTags(player, "D");
-            } else if (LEFT.isKeyDown()) {
-                checkTags(player, "L");
-            } else if (RIGHT.isKeyDown()) {
-                checkTags(player, "R");
-                String data = dataManager.get(password);
-                player.sendMessage(new TextComponentString(data));
-                if (data.equals("SUUDDLLRR")) {
-                    PACKET_HANDLER.sendToServer(new KeyMessage());
-                    dataManager.set(password, "S");
-                }
-            } else if ((!UP.isPressed()) && (!DOWN.isPressed()) && (!LEFT.isPressed()) && (!RIGHT.isPressed())) {
-                checkTags(player, "F");
+        EntityDataManager dataManager = player.getDataManager();
+        if (UP.isKeyDown()) {
+            checkTags(player, "U");
+        } else if (DOWN.isKeyDown()) {
+            checkTags(player, "D");
+        } else if (LEFT.isKeyDown()) {
+            checkTags(player, "L");
+        } else if (RIGHT.isKeyDown()) {
+            checkTags(player, "R");
+            String data = dataManager.get(password);
+            if (data.equals("SUUDDLLRR")) {
+                PACKET_HANDLER.sendToServer(new KeyMessage());
                 dataManager.set(password, "S");
             }
+        } else if ((!UP.isPressed()) && (!DOWN.isPressed()) && (!LEFT.isPressed()) && (!RIGHT.isPressed())) {
+            checkTags(player, "F");
+            dataManager.set(password, "S");
         }
     }
 }
