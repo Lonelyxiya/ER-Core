@@ -1,7 +1,7 @@
 package com.origins_eternal.ercore;
 
-import com.origins_eternal.ercore.utils.proxy.CommonProxy;
 import com.origins_eternal.ercore.content.tab.CreativeTab;
+import com.origins_eternal.ercore.utils.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -10,6 +10,8 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +29,7 @@ public class ERCore {
 	public static CommonProxy proxy;
 
 	public static final CreativeTabs ERCORE = new CreativeTab();
+	public static final SimpleNetworkWrapper PACKET_HANDLER = NetworkRegistry.INSTANCE.newSimpleChannel("ercore");
 
 	static { FluidRegistry.enableUniversalBucket(); }
 

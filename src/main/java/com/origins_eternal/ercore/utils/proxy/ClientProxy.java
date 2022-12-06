@@ -13,12 +13,16 @@ import slimeknights.tconstruct.library.client.texture.MetalTextureTexture;
 import slimeknights.tconstruct.library.materials.Material;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
+import static com.origins_eternal.ercore.event.KeyEvent.registerKeys;
 import static com.origins_eternal.ercore.utils.GameUtils.*;
 import static com.origins_eternal.ercore.utils.registry.MaterialRegister.registerMaterials;
 
 public class ClientProxy extends CommonProxy{
+    public static List<String> Chars = new ArrayList<>();
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -37,6 +41,7 @@ public class ClientProxy extends CommonProxy{
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
+        registerKeys();
     }
     @Optional.Method(modid = "tconstruct")
     public static void setRenderInfo(Material material, Fluid fluid) {
