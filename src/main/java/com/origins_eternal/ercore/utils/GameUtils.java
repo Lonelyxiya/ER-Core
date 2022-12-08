@@ -6,6 +6,8 @@ import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.world.WorldType;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.origins_eternal.ercore.event.KeyEvent.password;
+import static com.origins_eternal.ercore.event.ClientEvent.password;
 
 @SideOnly(Side.CLIENT)
 public class GameUtils {
@@ -75,6 +77,18 @@ public class GameUtils {
         } else {
             String data = dataManager.get(password);
             dataManager.set(password, data + letter);
+        }
+    }
+
+    @Optional.Method(modid = "rtg")
+    public static void defaultWorldtype() {
+        for (int i = 0; i < WorldType.WORLD_TYPES.length; i++) {
+            if (WorldType.WORLD_TYPES[i] == WorldType.byName("RTG")) {
+                WorldType defaultype = WorldType.WORLD_TYPES[0];
+                WorldType.WORLD_TYPES[0] = WorldType.WORLD_TYPES[i];
+                WorldType.WORLD_TYPES[i] = defaultype;
+                break;
+            }
         }
     }
 }

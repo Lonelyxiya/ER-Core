@@ -21,7 +21,7 @@ import static com.origins_eternal.ercore.utils.GameUtils.checkTags;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = MOD_ID)
-public class KeyEvent {
+public class ClientEvent {
     public static KeyBinding UP, DOWN, LEFT, RIGHT;
 
     public static DataParameter<String> password = new DataParameter<>(213, DataSerializers.STRING);
