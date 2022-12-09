@@ -22,11 +22,11 @@ public class CommonEvent {
     public static void onFluidPlaceBlock(BlockEvent.FluidPlaceBlockEvent event) {
         Block block = event.getState().getBlock();
         if (block.equals(Blocks.STONE)) {
-            event.setNewState(getBlockstate("chisel:basalt", Blocks.STONE));
+            event.setNewState(getBlockstate("taiga:basalt", Blocks.STONE));
         } else if (block.equals(Blocks.COBBLESTONE)) {
-            event.setNewState(getBlockstate("taiga:basalt", Blocks.COBBLESTONE));
+            event.setNewState(getBlockstate("chisel:basalt", Blocks.COBBLESTONE));
         } else if (block.equals(Blocks.OBSIDIAN)) {
-            event.setNewState(getBlockstate("advancedrocketry", Blocks.OBSIDIAN));
+            event.setNewState(getBlockstate("advancedrocketry:basalt", Blocks.OBSIDIAN));
         }
     }
 
