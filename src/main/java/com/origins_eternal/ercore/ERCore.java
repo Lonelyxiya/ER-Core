@@ -23,7 +23,7 @@ public class ERCore {
 
 	public static final String MOD_ID = "ercore";
 	public static final String MOD_NAME = "ER Core";
-	public static final String VERSION = "1.0.0";
+	public static final String VERSION = "1.1.0";
 	
 	@SidedProxy(clientSide = "com.origins_eternal.ercore.utils.proxy.ClientProxy", serverSide = "com.origins_eternal.ercore.utils.proxy.CommonProxy")
 	public static CommonProxy proxy;

@@ -31,8 +31,8 @@ public class GameUtils {
     public static void moveFiles() throws IOException {
         Minecraft mc = Minecraft.getMinecraft();
         String gamepath = mc.gameDir.getPath();
-        String frompath = gamepath + "\\mods\\Evolution-Reset-Resource-Pack-1.0.0.zip";
-        String topath = gamepath + "\\resourcepacks\\Evolution-Reset-Resource-Pack-1.0.0.zip";
+        String frompath = gamepath + "\\mods\\Evolution-Reset-Resource-Pack-1.1.0-RC1.zip";
+        String topath = gamepath + "\\resourcepacks\\Evolution-Reset-Resource-Pack-1.1.0-RC1.zip";
         File pack = new File(frompath);
         File resourcepack = new File(topath);
         Path resource = Paths.get(topath);
@@ -51,7 +51,7 @@ public class GameUtils {
         List<ResourcePackRepository.Entry> Packs = Repository.getRepositoryEntriesAll();
         List<ResourcePackRepository.Entry> Resourcepacks = new ArrayList<>();
         for (ResourcePackRepository.Entry pack : Packs) {
-            if (pack.getResourcePackName().contains("Evolution-Reset")) {
+            if (pack.getResourcePackName().equals("Evolution-Reset-Resource-Pack-1.1.0-RC1.zip")) {
                 Resourcepacks.add(pack);
             }
             Repository.setRepositories(Resourcepacks);
