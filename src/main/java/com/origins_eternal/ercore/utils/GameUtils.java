@@ -1,15 +1,21 @@
 package com.origins_eternal.ercore.utils;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.Language;
 import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldType;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import slimeknights.tconstruct.library.client.MaterialRenderInfo;
+import slimeknights.tconstruct.library.client.texture.MetalTextureTexture;
+import slimeknights.tconstruct.library.materials.Material;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static com.origins_eternal.ercore.ERCore.MOD_ID;
 import static com.origins_eternal.ercore.event.ClientEvent.password;
 
 @SideOnly(Side.CLIENT)
@@ -90,5 +97,15 @@ public class GameUtils {
                 break;
             }
         }
+    }
+
+    @Optional.Method(modid = "tconstruct")
+    public static void setRenderInfo(Material material, Fluid fluid) {
+        material.setRenderInfo(new MaterialRenderInfo.AbstractMaterialRenderInfo() {
+            @Override
+            public TextureAtlasSprite getTexture(ResourceLocation resourceLocation, String location) {
+                return new MetalTextureTexture(new ResourceLocation(MOD_ID + ":materials/" + material.getIdentifier()), resourceLocation, location, fluid.getColor(), 2f, 3f, 0f);
+            }
+        });
     }
 }
