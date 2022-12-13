@@ -19,7 +19,6 @@ import static com.origins_eternal.ercore.ERCore.MOD_ID;
 import static com.origins_eternal.ercore.ERCore.PACKET_HANDLER;
 import static com.origins_eternal.ercore.utils.GameUtils.checkTags;
 
-@SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = MOD_ID)
 public class ClientEvent {
     public static KeyBinding UP, DOWN, LEFT, RIGHT;
@@ -33,6 +32,7 @@ public class ClientEvent {
         ClientRegistry.registerKeyBinding(RIGHT = new KeyBinding("Right", Keyboard.KEY_RIGHT, "key.category." + MOD_ID) );
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void onKeyInput(InputEvent.KeyInputEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
