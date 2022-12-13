@@ -18,6 +18,7 @@ public class KeyHandler implements IMessageHandler<KeyMessage, IMessage> {
         double x = player.posX;
         double y = player.posY;
         double z = player.posZ;
+        player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 20 * 10, 2, false, false));
         player.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 20 * 15, 1, false, false));
         player.addPotionEffect(new PotionEffect(MobEffects.GLOWING, 20 * 15, 1, false, false));
         player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 20 * 10, 3, false, false));
@@ -27,6 +28,8 @@ public class KeyHandler implements IMessageHandler<KeyMessage, IMessage> {
             public void run() {
                 player.world.createExplosion(player, x, y, z, 3.2f, true);
                 player.attemptTeleport(x, y, z);
+                player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 20 * 12, 3, false, false));
+                player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 20 * 12, 2, false, false));
             }
         };
         timer.schedule(tp, 15000);
