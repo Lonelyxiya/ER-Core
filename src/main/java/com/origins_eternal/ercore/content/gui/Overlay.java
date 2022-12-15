@@ -23,7 +23,7 @@ public class Overlay extends Gui {
         if ((!player.isCreative()) && (!player.isSpectator())) {
             if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
                 Set<String> tags = player.getTags();
-                if (tags.contains("float")) {
+                if ((tags.contains("float")) && (!player.isInWater())) {
                     mc.renderEngine.bindTexture(gui);
                     EntityDataManager dataManager = player.getDataManager();
                     float bar = 80;
@@ -32,7 +32,7 @@ public class Overlay extends Gui {
                     float value = dataManager.get(endurance);
                     int current = (int) (percent * value);
                     int posX = event.getResolution().getScaledWidth() / 2 + 10;
-                    int posY = event.getResolution().getScaledHeight() - 59;
+                    int posY = event.getResolution().getScaledHeight() - 39;
                     drawTexturedModalRect(posX, posY, 0, 0, 80, 9);
                     drawTexturedModalRect(posX, posY, 0, 9, current, 9);
                 }
