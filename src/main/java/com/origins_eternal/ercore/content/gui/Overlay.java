@@ -32,7 +32,7 @@ public class Overlay extends Gui {
                     float value = dataManager.get(endurance);
                     int current = (int) (percent * value);
                     int posX = event.getResolution().getScaledWidth() / 2 + 10;
-                    int posY = event.getResolution().getScaledHeight() - 39;
+                    int posY = event.getResolution().getScaledHeight() - 79;
                     drawTexturedModalRect(posX, posY, 0, 0, 80, 9);
                     drawTexturedModalRect(posX, posY, 0, 9, current, 9);
                 }
