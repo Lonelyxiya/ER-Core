@@ -1,14 +1,17 @@
 package com.origins_eternal.ercore;
 
+import com.origins_eternal.ercore.content.gui.Overlay;
 import com.origins_eternal.ercore.content.tab.CreativeTab;
 import com.origins_eternal.ercore.utils.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -41,4 +44,7 @@ public class ERCore {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) { proxy.init(event); }
+
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) { proxy.postInit(event); }
 }

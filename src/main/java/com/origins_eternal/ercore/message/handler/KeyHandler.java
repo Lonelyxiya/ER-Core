@@ -23,16 +23,17 @@ public class KeyHandler implements IMessageHandler<KeyMessage, IMessage> {
         player.addPotionEffect(new PotionEffect(MobEffects.GLOWING, 20 * 15, 1, false, false));
         player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 20 * 10, 3, false, false));
         Timer timer = new Timer();
-        TimerTask tp = new TimerTask() {
+        TimerTask key = new TimerTask() {
             @Override
             public void run() {
                 player.world.createExplosion(player, x, y, z, 3.2f, true);
                 player.attemptTeleport(x, y, z);
+                player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20 * 5, 1, false, false));
                 player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 20 * 12, 3, false, false));
                 player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 20 * 12, 2, false, false));
             }
         };
-        timer.schedule(tp, 15000);
+        timer.schedule(key, 15000);
         return null;
     }
 }

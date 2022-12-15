@@ -1,12 +1,17 @@
 package com.origins_eternal.ercore.utils.proxy;
 
 import com.origins_eternal.ercore.config.Config;
+import com.origins_eternal.ercore.content.gui.Overlay;
 import com.origins_eternal.ercore.gen.GenOres;
+import com.origins_eternal.ercore.message.handler.EnduranceHandler;
 import com.origins_eternal.ercore.message.handler.KeyHandler;
+import com.origins_eternal.ercore.message.network.EnduranceMessage;
 import com.origins_eternal.ercore.message.network.KeyMessage;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,6 +33,7 @@ public class CommonProxy {
         Config.registerConfig(event);
         GameRegistry.registerWorldGenerator(new GenOres(), 0);
         PACKET_HANDLER.registerMessage(KeyHandler.class, KeyMessage.class, 0, Side.SERVER);
+        PACKET_HANDLER.registerMessage(EnduranceHandler.class, EnduranceMessage.class, 1, Side.SERVER);
     }
 
     public void construct(FMLConstructionEvent event) throws IOException {
@@ -37,5 +43,9 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
         registerOredicts();
         registerRecipes();
+    }
+
+    public void postInit(FMLPostInitializationEvent event) {
+
     }
 }

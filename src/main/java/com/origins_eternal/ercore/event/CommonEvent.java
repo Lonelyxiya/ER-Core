@@ -1,15 +1,25 @@
 package com.origins_eternal.ercore.event;
 
+import com.origins_eternal.ercore.message.network.EnduranceMessage;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.world.World;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.Set;
 
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
+import static com.origins_eternal.ercore.ERCore.PACKET_HANDLER;
+import static com.origins_eternal.ercore.event.ClientEvent.endurance;
+import static com.origins_eternal.ercore.utils.Utils.getBlockstate;
+import static com.origins_eternal.ercore.utils.Utils.setFloatTags;
 
 @Mod.EventBusSubscriber(modid = MOD_ID)
 public class CommonEvent {
@@ -30,13 +40,49 @@ public class CommonEvent {
         }
     }
 
-    public static IBlockState getBlockstate(String id, Block origin) {
-        Block block;
-        ResourceLocation location = new ResourceLocation(id);
-        block = Block.REGISTRY.getObject(location);
-        if (block.equals(Blocks.AIR)) {
-            block = origin;
+    @SubscribeEvent
+    public void onPlayerClone(PlayerEvent.Clone event) {
+        EntityPlayer player = event.getEntityPlayer();
+        setFloatTags(player, 0f);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        EntityPlayer player = event.player;
+        World world = player.world;
+        if (world.isRemote) {
+            if ((!player.isCreative()) && (!player.isSpectator())) {
+                Set<String> tags = player.getTags();
+                if (tags.contains("float")) {
+                    EntityDataManager dataManager = player.getDataManager();
+                    float value = dataManager.get(endurance);
+                    if (value <= 5) {
+                        PACKET_HANDLER.sendToServer(new EnduranceMessage(value));
+                    }
+                } else {
+                    setFloatTags(player, 0f);
+                }
+                if ((player.moveForward != 0) || (player.moveStrafing != 0)) {
+                    if (player.isSprinting()) {
+                        setFloatTags(player, -0.03f);
+                    } else {
+                        setFloatTags(player, -0.01f);
+                    }
+                } else {
+                    if ((player.isSneaking()) && (player.onGround)) {
+                        setFloatTags(player, 0.01f);
+                    } else if (player.onGround) {
+                        setFloatTags(player, 0.02f);
+                    }
+                }
+                if (!player.onGround) {
+                    if (player.isElytraFlying()) {
+                        setFloatTags(player, -0.01f);
+                    } else {
+                        setFloatTags(player, -0.03f);
+                    }
+                }
+            }
         }
-        return block.getDefaultState();
     }
 }

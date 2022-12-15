@@ -1,18 +1,19 @@
 package com.origins_eternal.ercore.utils;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.Language;
 import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import slimeknights.tconstruct.library.client.MaterialRenderInfo;
 import slimeknights.tconstruct.library.client.texture.MetalTextureTexture;
 import slimeknights.tconstruct.library.materials.Material;
@@ -27,10 +28,10 @@ import java.util.List;
 import java.util.Set;
 
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
+import static com.origins_eternal.ercore.event.ClientEvent.endurance;
 import static com.origins_eternal.ercore.event.ClientEvent.password;
 
-@SideOnly(Side.CLIENT)
-public class GameUtils {
+public class Utils {
     public static boolean checkChinese() {
         return System.getProperty("user.language").equals("zh");
     }
@@ -74,9 +75,9 @@ public class GameUtils {
         }
     }
 
-    public static void checkTags(EntityPlayer player, String letter) {
+    public static void checkStringTags(EntityPlayer player, String letter) {
         Set<String> tags = player.getTags();
-        String registerData = "true";
+        String registerData = "string";
         EntityDataManager dataManager = player.getDataManager();
         if (!tags.contains(registerData)) {
             dataManager.register(password, "S");
@@ -85,6 +86,31 @@ public class GameUtils {
             String data = dataManager.get(password);
             dataManager.set(password, data + letter);
         }
+    }
+
+    public static void setFloatTags(EntityPlayer player, Float value) {
+        Set<String> tags = player.getTags();
+        String registerData = "float";
+        EntityDataManager dataManager = player.getDataManager();
+        if (!tags.contains(registerData)) {
+            dataManager.register(endurance, 20f);
+            player.addTag(registerData);
+        } else {
+            float data = dataManager.get(endurance);
+            if (((data + value) >= 0) && ((data + value) <= 20)) {
+                dataManager.set(endurance, data + value);
+            }
+        }
+    }
+
+    public static IBlockState getBlockstate(String id, Block origin) {
+        Block block;
+        ResourceLocation location = new ResourceLocation(id);
+        block = Block.REGISTRY.getObject(location);
+        if (block.equals(Blocks.AIR)) {
+            block = origin;
+        }
+        return block.getDefaultState();
     }
 
     @Optional.Method(modid = "rtg")

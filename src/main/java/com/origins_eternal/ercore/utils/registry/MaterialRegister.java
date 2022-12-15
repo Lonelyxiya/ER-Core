@@ -13,7 +13,7 @@ import slimeknights.tconstruct.library.materials.*;
 
 import static com.origins_eternal.ercore.content.item.Items.Obsidian_Magic_Shard;
 import static com.origins_eternal.ercore.content.item.Items.Tungsten_Steel_Ingot;
-import static com.origins_eternal.ercore.utils.GameUtils.setRenderInfo;
+import static com.origins_eternal.ercore.utils.Utils.setRenderInfo;
 import static slimeknights.tconstruct.tools.TinkerTraits.*;
 
 public class MaterialRegister {
