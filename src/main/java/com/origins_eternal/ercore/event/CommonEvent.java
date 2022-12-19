@@ -4,6 +4,7 @@ import com.origins_eternal.ercore.message.network.EnduranceMessage;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -56,8 +57,13 @@ public class CommonEvent {
                 if (tags.contains("float")) {
                     EntityDataManager dataManager = player.getDataManager();
                     float value = dataManager.get(endurance);
-                    if (value <= 5) {
-                        PACKET_HANDLER.sendToServer(new EnduranceMessage(value));
+                    float max = player.getMaxHealth() + player.experienceLevel + player.getSleepTimer();
+                    float weakness = value / max;
+                    if (value > max) {
+                        dataManager.set(endurance, max);
+                    }
+                    if (weakness <= 0.25) {
+                        PACKET_HANDLER.sendToServer(new EnduranceMessage());
                     }
                 } else {
                     setFloatTags(player, 0f);
@@ -75,11 +81,15 @@ public class CommonEvent {
                         setFloatTags(player, 0.02f);
                     }
                 }
-                if (!player.onGround) {
+                if ((!player.onGround) && (!player.isPotionActive(MobEffects.LEVITATION))) {
                     if (player.isElytraFlying()) {
                         setFloatTags(player, -0.01f);
                     } else {
-                        setFloatTags(player, -0.03f);
+                        if (!player.isSprinting()) {
+                            setFloatTags(player, -0.03f);
+                        } else {
+                            setFloatTags(player, -0.02f);
+                        }
                     }
                 }
             }

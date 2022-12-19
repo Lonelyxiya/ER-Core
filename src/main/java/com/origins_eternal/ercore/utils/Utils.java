@@ -39,8 +39,8 @@ public class Utils {
     public static void moveFiles() throws IOException {
         Minecraft mc = Minecraft.getMinecraft();
         String gamepath = mc.gameDir.getPath();
-        String frompath = gamepath + "\\mods\\Evolution-Reset-Resource-Pack-1.1.0-RC1.zip";
-        String topath = gamepath + "\\resourcepacks\\Evolution-Reset-Resource-Pack-1.1.0-RC1.zip";
+        String frompath = gamepath + "\\mods\\Evolution-Reset-Resource-Pack-1.1.0-RC.zip";
+        String topath = gamepath + "\\resourcepacks\\Evolution-Reset-Resource-Pack-1.1.0-RC.zip";
         File pack = new File(frompath);
         File resourcepack = new File(topath);
         Path resource = Paths.get(topath);
@@ -59,7 +59,7 @@ public class Utils {
         List<ResourcePackRepository.Entry> Packs = Repository.getRepositoryEntriesAll();
         List<ResourcePackRepository.Entry> Resourcepacks = new ArrayList<>();
         for (ResourcePackRepository.Entry pack : Packs) {
-            if (pack.getResourcePackName().equals("Evolution-Reset-Resource-Pack-1.1.0-RC1.zip")) {
+            if (pack.getResourcePackName().equals("Evolution-Reset-Resource-Pack-1.1.0-RC.zip")) {
                 Resourcepacks.add(pack);
             }
             Repository.setRepositories(Resourcepacks);
@@ -92,12 +92,14 @@ public class Utils {
         Set<String> tags = player.getTags();
         String registerData = "float";
         EntityDataManager dataManager = player.getDataManager();
+        float k = player.
+        float max = player.getMaxHealth() + player.experienceLevel;
         if (!tags.contains(registerData)) {
-            dataManager.register(endurance, 20f);
+            dataManager.register(endurance, max);
             player.addTag(registerData);
         } else {
             float data = dataManager.get(endurance);
-            if (((data + value) >= 0) && ((data + value) <= 20)) {
+            if (((data + value) >= 0) && ((data + value) <= max)) {
                 dataManager.set(endurance, data + value);
             }
         }
