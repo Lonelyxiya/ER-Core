@@ -1,5 +1,6 @@
 package com.origins_eternal.ercore.content.gui;
 
+import com.origins_eternal.ercore.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.Gui;
@@ -21,20 +22,28 @@ public class Overlay extends Gui {
         Minecraft mc = Minecraft.getMinecraft();
         EntityPlayerSP player = mc.player;
         if ((!player.isCreative()) && (!player.isSpectator())) {
-            if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
-                Set<String> tags = player.getTags();
-                if ((tags.contains("float")) && (!player.isInWater())) {
-                    mc.renderEngine.bindTexture(gui);
-                    EntityDataManager dataManager = player.getDataManager();
-                    float bar = 80;
-                    float max = player.getMaxHealth() + player.experienceLevel;
-                    float percent = bar / max;
-                    float value = dataManager.get(endurance);
-                    int current = (int) (percent * value);
-                    int posX = event.getResolution().getScaledWidth() / 2 + 10;
-                    int posY = event.getResolution().getScaledHeight() - 79;
-                    drawTexturedModalRect(posX, posY, 0, 0, 80, 9);
-                    drawTexturedModalRect(posX, posY, 0, 9, current, 9);
+            if (Config.enableEndurance && Config.showbar) {
+                if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
+                    Set<String> tags = player.getTags();
+                    if (tags.contains("float")) {
+                        mc.renderEngine.bindTexture(gui);
+                        EntityDataManager dataManager = player.getDataManager();
+                        float max = Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel;
+                        float value = dataManager.get(endurance);
+                        float bar = 82;
+                        float percent = 1 - (value / max);
+                        int current = (int) (percent * bar);
+                        int posX = event.getResolution().getScaledWidth() / 2 + 10;
+                        int posY = event.getResolution().getScaledHeight() - 79;
+                        int posWater = posY - 10;
+                        if (player.getAir() < 300) {
+                            drawTexturedModalRect(posX, posWater, 0, 9, 82, 9);
+                            drawTexturedModalRect(posX, posWater, 0, 0, current, 9);
+                        } else {
+                            drawTexturedModalRect(posX, posY, 0, 9, 82, 9);
+                            drawTexturedModalRect(posX, posY, 0, 0, current, 9);
+                        }
+                    }
                 }
             }
         }

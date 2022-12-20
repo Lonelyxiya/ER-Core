@@ -1,5 +1,6 @@
 package com.origins_eternal.ercore.event;
 
+import com.origins_eternal.ercore.config.Config;
 import com.origins_eternal.ercore.message.network.EnduranceMessage;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,8 +44,10 @@ public class CommonEvent {
 
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event) {
-        EntityPlayer player = event.getEntityPlayer();
-        setFloatTags(player, 0f);
+        if (Config.enableEndurance) {
+            EntityPlayer player = event.getEntityPlayer();
+            setFloatTags(player, 0f);
+        }
     }
 
     @SubscribeEvent
@@ -53,42 +56,46 @@ public class CommonEvent {
         World world = player.world;
         if (world.isRemote) {
             if ((!player.isCreative()) && (!player.isSpectator())) {
-                Set<String> tags = player.getTags();
-                if (tags.contains("float")) {
-                    EntityDataManager dataManager = player.getDataManager();
-                    float value = dataManager.get(endurance);
-                    float max = player.getMaxHealth() + player.experienceLevel + player.getSleepTimer();
-                    float weakness = value / max;
-                    if (value > max) {
-                        dataManager.set(endurance, max);
-                    }
-                    if (weakness <= 0.25) {
-                        PACKET_HANDLER.sendToServer(new EnduranceMessage());
-                    }
-                } else {
-                    setFloatTags(player, 0f);
-                }
-                if ((player.moveForward != 0) || (player.moveStrafing != 0)) {
-                    if (player.isSprinting()) {
-                        setFloatTags(player, -0.03f);
+                if (Config.enableEndurance) {
+                    Set<String> tags = player.getTags();
+                    if (tags.contains("float")) {
+                        EntityDataManager dataManager = player.getDataManager();
+                        float value = dataManager.get(endurance);
+                        float max = Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel;
+                        float weakness = value / max;
+                        if (value > max) {
+                            dataManager.set(endurance, max);
+                        }
+                        if (weakness <= 0.25) {
+                            PACKET_HANDLER.sendToServer(new EnduranceMessage());
+                        }
                     } else {
-                        setFloatTags(player, -0.01f);
+                        setFloatTags(player, 0f);
                     }
-                } else {
-                    if ((player.isSneaking()) && (player.onGround)) {
-                        setFloatTags(player, 0.01f);
-                    } else if (player.onGround) {
-                        setFloatTags(player, 0.02f);
-                    }
-                }
-                if ((!player.onGround) && (!player.isPotionActive(MobEffects.LEVITATION))) {
-                    if (player.isElytraFlying()) {
-                        setFloatTags(player, -0.01f);
-                    } else {
-                        if (!player.isSprinting()) {
-                            setFloatTags(player, -0.03f);
-                        } else {
+                    if ((player.moveForward != 0) || (player.moveStrafing != 0)) {
+                        if (player.isRiding()) {
+                            setFloatTags(player, -0.01f);
+                        } else if (player.isInWater()) {
                             setFloatTags(player, -0.02f);
+                        } else if (player.isSprinting()) {
+                            setFloatTags(player, -0.03f);
+                        }
+                    } else {
+                        if (player.isSneaking()) {
+                            setFloatTags(player, 0.01f);
+                        } else if ((player.onGround) || (player.isRiding()) || (player.isInWater())) {
+                            setFloatTags(player, 0.02f);
+                        }
+                    }
+                    if ((!player.onGround) && (!player.isPotionActive(MobEffects.LEVITATION))) {
+                        if (player.isElytraFlying()) {
+                            setFloatTags(player, -0.01f);
+                        } else if ((!player.isOnLadder()) && (!player.isInWater()) && (!player.isRiding())) {
+                            if (!player.isSprinting()) {
+                                setFloatTags(player, -0.03f);
+                            } else {
+                                setFloatTags(player, -0.02f);
+                            }
                         }
                     }
                 }

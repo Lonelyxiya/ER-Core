@@ -1,5 +1,7 @@
 package com.origins_eternal.ercore.utils;
 
+import com.google.common.base.Predicate;
+import com.origins_eternal.ercore.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -11,7 +13,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.WorldType;
+import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Optional;
 import slimeknights.tconstruct.library.client.MaterialRenderInfo;
@@ -75,6 +80,16 @@ public class Utils {
         }
     }
 
+    public static WorldGenerator genOres(IBlockState ore, int size, int defaultsize, Predicate<IBlockState> block) {
+        WorldGenerator worldGenerator;
+        if (size > 50 || size < 0) {
+            worldGenerator = new WorldGenMinable(ore, defaultsize, block);
+        } else {
+            worldGenerator = new WorldGenMinable(ore, size, block);
+        }
+        return worldGenerator;
+    }
+
     public static void checkStringTags(EntityPlayer player, String letter) {
         Set<String> tags = player.getTags();
         String registerData = "string";
@@ -92,15 +107,16 @@ public class Utils {
         Set<String> tags = player.getTags();
         String registerData = "float";
         EntityDataManager dataManager = player.getDataManager();
-        float k = player.
-        float max = player.getMaxHealth() + player.experienceLevel;
+        float foodLevel = player.getFoodStats().getFoodLevel();
+        float k = 2 - (foodLevel / 20);
+        float max = Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel;
         if (!tags.contains(registerData)) {
             dataManager.register(endurance, max);
             player.addTag(registerData);
         } else {
             float data = dataManager.get(endurance);
-            if (((data + value) >= 0) && ((data + value) <= max)) {
-                dataManager.set(endurance, data + value);
+            if (((data + (value * k)) >= 0) && ((data + (value * k)) <= max)) {
+                dataManager.set(endurance, data + (value * k));
             }
         }
     }
