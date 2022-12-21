@@ -78,6 +78,8 @@ public class CommonEvent {
                                 setFloatTags(player, -0.01f);
                             } else if (player.isSprinting()) {
                                 setFloatTags(player, -0.03f);
+                            } else {
+                                setFloatTags(player, 0.01f);
                             }
                         }
                     } else {
