@@ -73,12 +73,12 @@ public class CommonEvent {
                         setFloatTags(player, 0f);
                     }
                     if ((player.moveForward != 0) || (player.moveStrafing != 0)) {
-                        if (player.isRiding()) {
-                            setFloatTags(player, -0.01f);
-                        } else if (player.isInWater()) {
-                            setFloatTags(player, -0.02f);
-                        } else if (player.isSprinting()) {
-                            setFloatTags(player, -0.03f);
+                        if (!player.isRiding()) {
+                            if (player.isInWater()) {
+                                setFloatTags(player, -0.01f);
+                            } else if (player.isSprinting()) {
+                                setFloatTags(player, -0.03f);
+                            }
                         }
                     } else {
                         if (player.isSneaking()) {
