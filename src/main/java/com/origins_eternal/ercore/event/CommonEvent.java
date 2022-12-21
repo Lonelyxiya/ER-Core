@@ -7,9 +7,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -40,6 +42,15 @@ public class CommonEvent {
         } else if (block.equals(Blocks.OBSIDIAN)) {
             event.setNewState(getBlockstate("advancedrocketry:basalt", Blocks.OBSIDIAN));
         }
+    }
+
+    @SubscribeEvent
+    public static void onCreateSpawnPosition(WorldEvent.CreateSpawnPosition event) {
+        World world = event.getWorld();
+        int sea = world.getSeaLevel();
+        BlockPos blockPos = new BlockPos(0, sea, 0);
+        event.setCanceled(true);
+        world.setSpawnPoint(blockPos);
     }
 
     @SubscribeEvent
