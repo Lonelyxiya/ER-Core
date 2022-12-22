@@ -1,6 +1,5 @@
 package com.origins_eternal.ercore.utils;
 
-import com.google.common.base.Predicate;
 import com.origins_eternal.ercore.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -13,10 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Optional;
 import slimeknights.tconstruct.library.client.MaterialRenderInfo;
@@ -78,16 +74,6 @@ public class Utils {
             mc.getLanguageManager().setCurrentLanguage(new Language("zh_cn", "CN", "简体中文", false));
             gameSettings.language = "zh_cn";
         }
-    }
-
-    public static WorldGenerator genOres(IBlockState ore, int size, int defaultsize, Predicate<IBlockState> block) {
-        WorldGenerator worldGenerator;
-        if (size > 50 || size < 0) {
-            worldGenerator = new WorldGenMinable(ore, defaultsize, block);
-        } else {
-            worldGenerator = new WorldGenMinable(ore, size, block);
-        }
-        return worldGenerator;
     }
 
     public static void checkStringTags(EntityPlayer player, String letter) {

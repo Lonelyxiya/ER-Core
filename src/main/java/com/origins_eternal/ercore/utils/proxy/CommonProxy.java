@@ -1,13 +1,11 @@
 package com.origins_eternal.ercore.utils.proxy;
 
 import com.origins_eternal.ercore.config.Config;
-import com.origins_eternal.ercore.content.gui.Overlay;
 import com.origins_eternal.ercore.gen.GenOres;
 import com.origins_eternal.ercore.message.handler.EnduranceHandler;
 import com.origins_eternal.ercore.message.handler.KeyHandler;
 import com.origins_eternal.ercore.message.network.EnduranceMessage;
 import com.origins_eternal.ercore.message.network.KeyMessage;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -27,10 +25,10 @@ import static com.origins_eternal.ercore.utils.registry.RecipeRegister.registerR
 public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         registerFluids();
+        Config.registerConfig(event);
         if (Loader.isModLoaded("tconstruct")) {
             preTinker();
         }
-        Config.registerConfig(event);
         GameRegistry.registerWorldGenerator(new GenOres(), 0);
         PACKET_HANDLER.registerMessage(KeyHandler.class, KeyMessage.class, 0, Side.SERVER);
         PACKET_HANDLER.registerMessage(EnduranceHandler.class, EnduranceMessage.class, 1, Side.SERVER);

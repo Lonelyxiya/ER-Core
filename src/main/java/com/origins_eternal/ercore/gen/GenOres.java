@@ -14,7 +14,6 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import java.util.Random;
 
 import static com.origins_eternal.ercore.content.block.Ores.*;
-import static com.origins_eternal.ercore.utils.Utils.genOres;
 
 public class GenOres implements IWorldGenerator
 {
@@ -26,12 +25,12 @@ public class GenOres implements IWorldGenerator
 	private final WorldGenerator tungsten_ore;
 
 	public GenOres() {
-		copper_ore = genOres(Copper_Ore.getDefaultState(), Config.copperVeinSize, 6, BlockMatcher.forBlock(Blocks.STONE));
-		tin_ore = genOres(Tin_Ore.getDefaultState(), Config.tinVeinSize, 4, BlockMatcher.forBlock(Blocks.STONE));
-		iridium_ore = genOres(Iridium_Ore.getDefaultState(), Config.iridiumVeinSize, 1, BlockMatcher.forBlock(Blocks.STONE));
-		rutile_ore = genOres(Rutile_Ore.getDefaultState(), Config.rutileVeinSize, 5, BlockMatcher.forBlock(Blocks.STONE));
-		sulphur_ore = genOres(Sulphur_Ore.getDefaultState(), Config.sulphurVeinSize, 10, BlockMatcher.forBlock(Blocks.STONE));
-		tungsten_ore = genOres(Tungsten_ore.getDefaultState(), Config.tungstenVeinSize, 5, BlockMatcher.forBlock(Blocks.STONE));
+		copper_ore = new WorldGenMinable(Copper_Ore.getDefaultState(), Config.copperVeinSize, BlockMatcher.forBlock(Blocks.STONE));
+		tin_ore = new WorldGenMinable(Tin_Ore.getDefaultState(), Config.tinVeinSize, BlockMatcher.forBlock(Blocks.STONE));
+		iridium_ore = new WorldGenMinable(Iridium_Ore.getDefaultState(), Config.iridiumVeinSize, BlockMatcher.forBlock(Blocks.STONE));
+		rutile_ore = new WorldGenMinable(Rutile_Ore.getDefaultState(), Config.rutileVeinSize, BlockMatcher.forBlock(Blocks.STONE));
+		sulphur_ore = new WorldGenMinable(Sulphur_Ore.getDefaultState(), Config.sulphurVeinSize, BlockMatcher.forBlock(Blocks.STONE));
+		tungsten_ore = new WorldGenMinable(Tungsten_ore.getDefaultState(), Config.tungstenVeinSize, BlockMatcher.forBlock(Blocks.STONE));
 	}
 
 	@Override

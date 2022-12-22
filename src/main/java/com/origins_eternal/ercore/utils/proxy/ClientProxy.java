@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
 import static com.origins_eternal.ercore.utils.Utils.*;
+import static com.origins_eternal.ercore.utils.registry.MaterialRegister.preTinker;
 
 public class ClientProxy extends CommonProxy{
     public static KeyBinding UP, DOWN, LEFT, RIGHT;

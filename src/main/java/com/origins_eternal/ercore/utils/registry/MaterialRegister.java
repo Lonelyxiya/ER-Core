@@ -35,7 +35,6 @@ public class MaterialRegister {
         TinkerRegistry.addMaterialStats(material, new BowMaterialStats(drawSpeed, range, bonusDamage));
         material.setFluid(fluid).setCraftable(craft).setCastable(cast).addItem(item, 1, volume);
         material.setRepresentativeItem(item);
-        setRenderInfo(material, fluid);
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
             setRenderInfo(material, fluid);
         }
