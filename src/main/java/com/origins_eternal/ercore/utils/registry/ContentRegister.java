@@ -3,34 +3,26 @@ package com.origins_eternal.ercore.utils.registry;
 import com.origins_eternal.ercore.content.block.Blocks;
 import com.origins_eternal.ercore.content.block.FluidBlocks;
 import com.origins_eternal.ercore.content.block.Ores;
-import com.origins_eternal.ercore.content.fluid.Fluids;
 import com.origins_eternal.ercore.content.item.Blueprints;
 import com.origins_eternal.ercore.content.item.Items;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import static com.origins_eternal.ercore.ERCore.ERCORE;
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
 import static com.origins_eternal.ercore.content.block.FluidBlocks.FLUIDBLOCKS;
 

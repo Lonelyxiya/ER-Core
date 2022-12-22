@@ -5,8 +5,6 @@ import com.origins_eternal.ercore.content.item.Blueprints;
 import com.origins_eternal.ercore.content.item.Items;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OredictRegister {

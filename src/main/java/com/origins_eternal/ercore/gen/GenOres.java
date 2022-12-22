@@ -24,8 +24,7 @@ public class GenOres implements IWorldGenerator
 	private final WorldGenerator sulphur_ore;
 	private final WorldGenerator tungsten_ore;
 
-	public GenOres()
-	{
+	public GenOres() {
 		copper_ore = new WorldGenMinable(Copper_Ore.getDefaultState(), Config.copperVeinSize, BlockMatcher.forBlock(Blocks.STONE));
 		tin_ore = new WorldGenMinable(Tin_Ore.getDefaultState(), Config.tinVeinSize, BlockMatcher.forBlock(Blocks.STONE));
 		iridium_ore = new WorldGenMinable(Iridium_Ore.getDefaultState(), Config.iridiumVeinSize, BlockMatcher.forBlock(Blocks.STONE));
@@ -49,18 +48,15 @@ public class GenOres implements IWorldGenerator
 		}
 	}
 
-	private void runGenerator(WorldGenerator gen, World world, Random rand, int chunkX, int chunkZ, int chance, int minHeight, int maxHeight)
-	{
-		if(minHeight > maxHeight || minHeight < 0 || maxHeight > 256) throw new IllegalArgumentException("Ore Generated below or above the min and max height");
-
+	private void runGenerator(WorldGenerator gen, World world, Random rand, int chunkX, int chunkZ, int chance, int minHeight, int maxHeight) {
+		if (minHeight > maxHeight || maxHeight < 0 || minHeight < 0 || maxHeight > 256 || chance > 50 || chance < 0) return;
 		int heightDiff = maxHeight - minHeight + 1;
-		for(int i = 0; i < chance; i++)
-		{
+		for (int i = 0; i < chance; i++) {
 			int x = chunkX * 16 + rand.nextInt(16);
 			int y = minHeight + rand.nextInt(heightDiff);
 			int z = chunkZ * 16 + rand.nextInt(16);
 
-			gen.generate(world, rand, new BlockPos(x,y,z));
+			gen.generate(world, rand, new BlockPos(x, y, z));
 		}
 	}
 }
