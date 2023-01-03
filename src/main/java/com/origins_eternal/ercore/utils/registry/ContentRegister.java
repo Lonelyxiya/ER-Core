@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -36,6 +37,9 @@ public class ContentRegister {
         }
         for (Block ore : Ores.ORES) {
             event.getRegistry().register(ore);
+            String blockname = ore.getTranslationKey().replace("_ore", "");
+            String oredictname = blockname.substring(12,13).toUpperCase() + blockname.substring(13);
+            OreDictionary.registerOre("ore" + oredictname, ore);
         }
         for (Block fluidblock : FluidBlocks.FLUIDBLOCKS) {
             event.getRegistry().register(fluidblock);
@@ -46,9 +50,28 @@ public class ContentRegister {
     public static void registerItems(RegistryEvent.Register<Item> event) {
         for (Item item : Items.ITEMS) {
             event.getRegistry().register(item);
+            String itemname = item.getTranslationKey();
+            if (itemname.contains("ingot")) {
+                String ingotname = itemname.replaceAll("_", "").replace("ingot", "");
+                String oredictname = ingotname.substring(12, 13).toUpperCase() + ingotname.substring(13);
+                OreDictionary.registerOre("ingot" + oredictname, item);
+            } else if (itemname.contains("nugget")) {
+                String nuggetname = itemname.replaceAll("_", "").replace("nugget", "");
+                String oredictname = nuggetname.substring(12, 13).toUpperCase() + nuggetname.substring(13);
+                OreDictionary.registerOre("nugget" + oredictname, item);
+            } else if (!(itemname.contains("_"))) {
+                OreDictionary.registerOre(itemname, item);
+            }
         }
         for (Item print : Blueprints.PRINTS) {
             event.getRegistry().register(print);
+            String itemname = print.getTranslationKey();
+            OreDictionary.registerOre("blueprint", print);
+            if (itemname.contains("workshop")) {
+                OreDictionary.registerOre("blueprintWorkshop", print);
+            } else if (itemname.contains("workstation")) {
+                OreDictionary.registerOre("blueprintWorkstation", print);
+            }
         }
         for (Item fluiditem: FluidBlocks.FLUIDITEMS) {
             event.getRegistry().register(fluiditem);

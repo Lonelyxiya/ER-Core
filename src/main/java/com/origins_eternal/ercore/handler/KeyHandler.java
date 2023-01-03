@@ -1,6 +1,6 @@
-package com.origins_eternal.ercore.message.handler;
+package com.origins_eternal.ercore.handler;
 
-import com.origins_eternal.ercore.message.network.KeyMessage;
+import com.origins_eternal.ercore.message.KeyMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;

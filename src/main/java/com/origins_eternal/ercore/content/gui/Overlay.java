@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Set;
@@ -33,8 +34,15 @@ public class Overlay extends Gui {
                         float bar = 82;
                         float percent = 1 - (value / max);
                         int current = (int) (percent * bar);
+                        int offY = 0;
+                        if (Loader.isModLoaded("dualhotbar")) {
+                            offY = offY -20;
+                        }
+                        if (Loader.isModLoaded("toughasnails")) {
+                            offY = offY -10;
+                        }
                         int posX = event.getResolution().getScaledWidth() / 2 + 10;
-                        int posY = event.getResolution().getScaledHeight() - 79;
+                        int posY = event.getResolution().getScaledHeight() - 49 + offY;
                         int posWater = posY - 10;
                         if (player.getAir() < 300) {
                             drawTexturedModalRect(posX, posWater, 0, 9, 82, 9);

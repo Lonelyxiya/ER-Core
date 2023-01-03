@@ -1,6 +1,6 @@
 package com.origins_eternal.ercore.event;
 
-import com.origins_eternal.ercore.message.network.KeyMessage;
+import com.origins_eternal.ercore.message.KeyMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
-import static com.origins_eternal.ercore.ERCore.PACKET_HANDLER;
+import static com.origins_eternal.ercore.ERCore.packetHandler;
 import static com.origins_eternal.ercore.utils.Utils.checkStringTags;
 import static com.origins_eternal.ercore.utils.proxy.ClientProxy.*;
 
@@ -39,7 +39,7 @@ public class ClientEvent {
             checkStringTags(player, "R");
             String data = dataManager.get(password);
             if (data.contains("SUUDDLLRR")) {
-                PACKET_HANDLER.sendToServer(new KeyMessage());
+                packetHandler.sendToServer(new KeyMessage());
                 dataManager.set(password, "S");
             }
         } else if ((!UP.isPressed()) && (!DOWN.isPressed()) && (!LEFT.isPressed()) && (!RIGHT.isPressed())) {

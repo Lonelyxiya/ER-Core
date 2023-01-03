@@ -24,9 +24,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
 import static com.origins_eternal.ercore.event.ClientEvent.endurance;
@@ -89,20 +87,53 @@ public class Utils {
         }
     }
 
+    public static boolean checkTired(EntityPlayer player) {
+        boolean tired = false;
+        Set<String> tags = player.getTags();
+        String registerData = "float";
+        EntityDataManager dataManager = player.getDataManager();
+        float maxHealth = player.getMaxHealth();
+        float max = Config.endurance + maxHealth - 20 + player.experienceLevel;
+        if (tags.contains(registerData)) {
+            float value = dataManager.get(endurance);
+            float weakness = value / max;
+            tired = weakness < 0.25;
+        }
+        return tired;
+    }
+
+    public static void addStringTags(EntityPlayer player, String bool) {
+        Set<String> tags = player.getTags();
+        if (!tags.contains(bool)) {
+            player.addTag(bool);
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    player.removeTag(bool);
+                }
+            };
+            timer.schedule(timerTask, 3000);
+        }
+    }
+
     public static void setFloatTags(EntityPlayer player, Float value) {
         Set<String> tags = player.getTags();
         String registerData = "float";
         EntityDataManager dataManager = player.getDataManager();
         float foodLevel = player.getFoodStats().getFoodLevel();
+        float maxHealth = player.getMaxHealth();
         float k = 2 - (foodLevel / 20);
-        float max = Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel;
+        float m = 2 - (maxHealth / 20);
+        float max = Config.endurance + maxHealth - 20 + player.experienceLevel;
         if (!tags.contains(registerData)) {
-            dataManager.register(endurance, max);
+            float origin = (float) (max * 0.32);
+            dataManager.register(endurance, origin);
             player.addTag(registerData);
         } else {
             float data = dataManager.get(endurance);
-            if (((data + (value * k)) >= 0) && ((data + (value * k)) <= max)) {
-                dataManager.set(endurance, data + (value * k));
+            if (((data + (value * k * m)) >= 0) && ((data + (value * k * m)) <= max)) {
+                dataManager.set(endurance, data + (value * k * m));
             }
         }
     }
