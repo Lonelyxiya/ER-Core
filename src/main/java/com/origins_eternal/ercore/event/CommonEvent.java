@@ -80,7 +80,9 @@ public class CommonEvent {
         if (Config.enableEndurance) {
             EntityPlayer player = event.getEntityPlayer();
             if ((!player.isCreative()) && (!player.isSpectator())) {
-                setFloatTags(player, 0f);
+                if (player.world.isRemote) {
+                    setFloatTags(player, 0f);
+                }
             }
         }
     }
