@@ -53,7 +53,7 @@ public class Config {
         config = new Configuration(file);
 
         String endurancecategory = "Endurance";
-        config.addCustomCategoryComment(endurancecategory, "Custom your EnduranceData, it can be closed if you feel terrible!");
+        config.addCustomCategoryComment(endurancecategory, "Custom your endurance, it can be closed if you feel terrible!");
 
         enableEndurance = config.getBoolean("Enable Endurance", endurancecategory, true, "Enable or Disable Endurance");
         showbar = config.getBoolean("Show Overlay Bar", endurancecategory, true, "Whether to Show Endurance Bar or Not");
