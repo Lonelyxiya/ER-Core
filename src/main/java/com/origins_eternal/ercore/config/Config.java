@@ -42,17 +42,31 @@ public class Config {
     public static float endurance;
     public static boolean enableEndurance;
     public static boolean showbar;
+    public static boolean ores;
+    public static boolean blocks;
+    public static boolean items;
+    public static boolean fluids;
+    public static boolean blueprints;
 
     public static void init(File file) {
 
         config = new Configuration(file);
 
         String endurancecategory = "Endurance";
-        config.addCustomCategoryComment(endurancecategory, "Custom your endurance, it can be closed if you feel terrible!");
+        config.addCustomCategoryComment(endurancecategory, "Custom your EnduranceData, it can be closed if you feel terrible!");
 
         enableEndurance = config.getBoolean("Enable Endurance", endurancecategory, true, "Enable or Disable Endurance");
-        showbar = config.getBoolean("Show Overlay Bar", endurancecategory, true, "Whether To Show Endurance Bar or Not");
+        showbar = config.getBoolean("Show Overlay Bar", endurancecategory, true, "Whether to Show Endurance Bar or Not");
         endurance = config.getFloat("Initial Endurance Value", endurancecategory, 20, 10, 40, "Set Initial Endurance Value");
+
+        String contentcategory = "Content";
+        config.addCustomCategoryComment(contentcategory, "Custom the blocks or items which are added by the mod, they will not be added by default.");
+
+        ores = config.getBoolean("Enable Ores", contentcategory, false, "Whether To Add Ores or Not");
+        blocks = config.getBoolean("Enable Blocks", contentcategory, false, "Whether To Add Blocks or Not");
+        items = config.getBoolean("Enable Items", contentcategory, false, "Whether To Add Items or Not");
+        blueprints = config.getBoolean("Enable Blueprints", contentcategory, false, "Whether To Add Blueprints or Not");
+        fluids = config.getBoolean("Enable Fluid", contentcategory, false, "Whether To Add Fluids or Not");
 
         String orecategory = "Ore Generation";
         config.addCustomCategoryComment(orecategory, "Custom your ores generation, But do not go out of range!");

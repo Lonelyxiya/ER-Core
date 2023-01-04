@@ -13,13 +13,13 @@ public class TiredHandler implements IMessageHandler<TiredMessage, IMessage> {
     public IMessage onMessage(TiredMessage message, MessageContext context) {
         EntityPlayer player = context.getServerHandler().player;
         if (!player.isPotionActive(MobEffects.SLOWNESS)) {
-            player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 60, 2, false, false));
+            player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 20 * 3, 2, false, false));
         }
         if (!player.isPotionActive(MobEffects.MINING_FATIGUE)) {
-            player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 60, 3, false, false));
+            player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 20 * 3, 3, false, false));
         }
         if (!player.isPotionActive(MobEffects.WEAKNESS)) {
-            player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 60, 1, false, false));
+            player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 20 * 3, 1, false, false));
         }
         return null;
     }

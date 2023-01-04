@@ -30,6 +30,7 @@ public class ERCore {
 	public static CommonProxy proxy;
 
 	public static final CreativeTabs ERCORE = new CreativeTab();
+
 	public static final SimpleNetworkWrapper packetHandler = NetworkRegistry.INSTANCE.newSimpleChannel("ercore");
 
 	static { FluidRegistry.enableUniversalBucket(); }

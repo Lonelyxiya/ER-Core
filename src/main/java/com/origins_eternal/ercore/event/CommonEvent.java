@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,9 +24,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Set;
 
-import static com.origins_eternal.ercore.ERCore.MOD_ID;
-import static com.origins_eternal.ercore.ERCore.packetHandler;
-import static com.origins_eternal.ercore.event.ClientEvent.endurance;
+import static com.origins_eternal.ercore.ERCore.*;
+import static com.origins_eternal.ercore.event.ClientEvent.EnduranceData;
 import static com.origins_eternal.ercore.utils.Utils.*;
 
 @Mod.EventBusSubscriber(modid = MOD_ID)
@@ -59,15 +59,48 @@ public class CommonEvent {
     }
 
     @SubscribeEvent
+    public static void onBreak(BlockEvent.BreakEvent event) {
+        if (Config.enableEndurance) {
+            World world = event.getWorld();
+            if (!world.isRemote) {
+                float hardness = event.getState().getBlockHardness(world, event.getPos());
+                if (hardness > 0.5) {
+                    EntityPlayer player = event.getPlayer();
+                    Set<String> tags = player.getTags();
+                    if (tags.contains("float")) {
+                        addStringTags(player, "break", 1);
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        if (Config.enableEndurance) {
+            EntityPlayer player = event.getEntityPlayer();
+            if ((!player.isCreative()) && (!player.isSpectator())) {
+                setFloatTags(player, 0f);
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void onLivingJump(LivingEvent.LivingJumpEvent event) {
         if (Config.enableEndurance) {
             Entity entity = event.getEntity();
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) entity;
-                addStringTags(player, "true");
-                setFloatTags(player, -0.2f);
-                if (checkTired(player)) {
-                    event.getEntityLiving().motionY -= 1F;
+                if ((!player.isCreative()) && (!player.isSpectator())) {
+                    Set<String> tags = player.getTags();
+                    if (tags.contains("float")) {
+                        addStringTags(player, "jump", 3);
+                        if (checkStatus(player).equals("tired")) {
+                            event.getEntityLiving().motionY -= 1F;
+                        } else {
+                            setFloatTags(player, -0.2f);
+                        }
+                    }
                 }
             }
         }
@@ -84,41 +117,64 @@ public class CommonEvent {
                     if (tags.contains("float")) {
                         EntityDataManager dataManager = player.getDataManager();
                         float max = Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel;
-                        float value = dataManager.get(endurance);
+                        float value = dataManager.get(EnduranceData);
                         if (value > max) {
-                            dataManager.set(endurance, max);
+                            dataManager.set(EnduranceData, max);
                         }
-                        if (checkTired(player)) {
-                            if ((!player.isPotionActive(MobEffects.MINING_FATIGUE)) || (!player.isPotionActive(MobEffects.WEAKNESS)) || (!player.isPotionActive(MobEffects.SLOWNESS))) {
-                                packetHandler.sendToServer(new TiredMessage());
+                        if ((checkStatus(player).equals("spirit")) && (player.isPlayerSleeping())) {
+                            player.wakeUpPlayer(false, false, false);
+                            player.removeTag("rest");
+                        } else if ((checkStatus(player).equals("tired")) && (!player.isPlayerSleeping())) {
+                            player.setSprinting(false);
+                            if (!tags.contains("rest")) {
+                                if ((!player.isPotionActive(MobEffects.MINING_FATIGUE)) || (!player.isPotionActive(MobEffects.WEAKNESS)) || (!player.isPotionActive(MobEffects.SLOWNESS))) {
+                                    packetHandler.sendToServer(new TiredMessage());
+                                }
+                            }
+                        } else if (checkStatus(player).equals("exhausted")) {
+                            if (!tags.contains("rest")) {
+                                player.addTag("rest");
+                                player.removePotionEffect(MobEffects.WEAKNESS);
+                                player.removePotionEffect(MobEffects.MINING_FATIGUE);
+                                player.removePotionEffect(MobEffects.SLOWNESS);
+                                BlockPos blockPos = new BlockPos(player);
+                                player.trySleep(blockPos);
+                            }
+                        }
+                        if (player.isOnLadder()) {
+                            if (player.motionY > 0) {
+                                setFloatTags(player, -0.005f);
                             }
                         }
                         if ((player.moveForward != 0) || (player.moveStrafing != 0)) {
-                            if (!tags.contains("true")) {
-                                addStringTags(player, "true");
-                            }
                             if (player.isRiding()) {
                                 if (player.isOverWater()) {
                                     setFloatTags(player, -0.005f);
                                 }
                             } else {
                                 if (player.isSprinting()) {
+                                    addStringTags(player, "sprint", 7);
                                     setFloatTags(player, -0.03f);
                                 } else if (player.isInWater()) {
+                                    addStringTags(player, "swim", 5);
                                     setFloatTags(player, -0.01f);
-                                } else if (!tags.contains("true")) {
-                                    setFloatTags(player, 0.02f);
+                                } else if (checkStatus(player).equals("tired")) {
+                                    setFloatTags(player, -0.02f);
+                                } else if ((player.getAir() == 300) && (!tags.contains("jump")) && (!tags.contains("break")) && (!tags.contains("swim")) && (!tags.contains("sprint"))) {
+                                    setFloatTags(player, 0.01f);
                                 }
                             }
-                        } else if (!tags.contains("true")) {
-                            if (player.isSneaking()) {
-                                setFloatTags(player, 0.01f);
-                            } else if (player.onGround) {
+                        } else if ((player.getAir() >= 300) && (!tags.contains("jump")) && (!tags.contains("break")) && (!tags.contains("swim")) && (!tags.contains("sprint"))) {
+                            if ((player.onGround) && (player.isPlayerSleeping())) {
                                 setFloatTags(player, 0.03f);
-                            } else if (player.isRiding()) {
-                                setFloatTags(player, 0.05f);
+                            } else if (tags.contains("rest")) {
+                                setFloatTags(player, 0.01f);
                             } else if (player.isInWater()) {
                                 setFloatTags(player, 0.02f);
+                            } else if (player.isRiding()) {
+                                setFloatTags(player, 0.05f);
+                            } else if (player.isPlayerSleeping()) {
+                                setFloatTags(player, 0.08f);
                             }
                         }
                     } else {

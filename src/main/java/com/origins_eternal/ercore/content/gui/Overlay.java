@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.Set;
 
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
-import static com.origins_eternal.ercore.event.ClientEvent.endurance;
+import static com.origins_eternal.ercore.event.ClientEvent.EnduranceData;
 
 public class Overlay extends Gui {
     private final ResourceLocation gui = new ResourceLocation(MOD_ID, "textures/gui/endurance.png");
@@ -30,7 +30,7 @@ public class Overlay extends Gui {
                         mc.renderEngine.bindTexture(gui);
                         EntityDataManager dataManager = player.getDataManager();
                         float max = Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel;
-                        float value = dataManager.get(endurance);
+                        float value = dataManager.get(EnduranceData);
                         float bar = 82;
                         float percent = 1 - (value / max);
                         int current = (int) (percent * bar);

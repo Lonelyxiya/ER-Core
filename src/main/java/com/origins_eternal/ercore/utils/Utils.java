@@ -27,8 +27,8 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
-import static com.origins_eternal.ercore.event.ClientEvent.endurance;
-import static com.origins_eternal.ercore.event.ClientEvent.password;
+import static com.origins_eternal.ercore.event.ClientEvent.EnduranceData;
+import static com.origins_eternal.ercore.event.ClientEvent.ContraData;
 
 public class Utils {
     public static boolean checkChinese() {
@@ -79,41 +79,50 @@ public class Utils {
         String registerData = "string";
         EntityDataManager dataManager = player.getDataManager();
         if (!tags.contains(registerData)) {
-            dataManager.register(password, "S");
+            dataManager.register(ContraData, "S");
             player.addTag(registerData);
         } else {
-            String data = dataManager.get(password);
-            dataManager.set(password, data + letter);
+            String data = dataManager.get(ContraData);
+            dataManager.set(ContraData, data + letter);
         }
     }
 
-    public static boolean checkTired(EntityPlayer player) {
-        boolean tired = false;
+    public static String checkStatus(EntityPlayer player) {
+        String status = "normal";
         Set<String> tags = player.getTags();
         String registerData = "float";
         EntityDataManager dataManager = player.getDataManager();
         float maxHealth = player.getMaxHealth();
         float max = Config.endurance + maxHealth - 20 + player.experienceLevel;
         if (tags.contains(registerData)) {
-            float value = dataManager.get(endurance);
+            float value = dataManager.get(EnduranceData);
             float weakness = value / max;
-            tired = weakness < 0.25;
+            if (weakness < 0.01) {
+                status = "exhausted";
+            } else if (weakness <= 0.25) {
+                status = "tired";
+            } else if (weakness <=0.99) {
+                status = "normal";
+            } else if (weakness > 0.99) {
+                status = "spirit";
+            }
+
         }
-        return tired;
+        return status;
     }
 
-    public static void addStringTags(EntityPlayer player, String bool) {
+    public static void addStringTags(EntityPlayer player, String tag, int second) {
         Set<String> tags = player.getTags();
-        if (!tags.contains(bool)) {
-            player.addTag(bool);
+        if (!tags.contains(tag)) {
+            player.addTag(tag);
             Timer timer = new Timer();
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    player.removeTag(bool);
+                    player.removeTag(tag);
                 }
             };
-            timer.schedule(timerTask, 3000);
+            timer.schedule(timerTask, second * 1000L);
         }
     }
 
@@ -121,19 +130,41 @@ public class Utils {
         Set<String> tags = player.getTags();
         String registerData = "float";
         EntityDataManager dataManager = player.getDataManager();
-        float foodLevel = player.getFoodStats().getFoodLevel();
-        float maxHealth = player.getMaxHealth();
-        float k = 2 - (foodLevel / 20);
-        float m = 2 - (maxHealth / 20);
-        float max = Config.endurance + maxHealth - 20 + player.experienceLevel;
         if (!tags.contains(registerData)) {
-            float origin = (float) (max * 0.32);
-            dataManager.register(endurance, origin);
+            float origin = (float) ((Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel) * 0.32);
+            dataManager.register(EnduranceData, origin);
             player.addTag(registerData);
         } else {
-            float data = dataManager.get(endurance);
-            if (((data + (value * k * m)) >= 0) && ((data + (value * k * m)) <= max)) {
-                dataManager.set(endurance, data + (value * k * m));
+            float foodLevel = player.getFoodStats().getFoodLevel();
+            float maxFoodLevel = 20;
+            float healthLevel = player.getHealth();
+            float maxHealth = player.getMaxHealth();
+            float maxEndurance = Config.endurance + maxHealth - 20 + player.experienceLevel;
+            float enduranceLevel = dataManager.get(EnduranceData);
+            float food = 1;
+            float health = 1;
+            if (!tags.contains("rest")) {
+                if (value < 0) {
+                    if (foodLevel <= maxFoodLevel) {
+                        food = (2 - (foodLevel / maxFoodLevel));
+                    }
+                    health = (2 - (healthLevel / maxHealth));
+                } else if (value > 0) {
+                    if (foodLevel <= maxFoodLevel) {
+                        food = healthLevel / maxHealth;
+                    }
+                    health = healthLevel / maxHealth;
+                }
+            }
+            float k = food * health;
+            boolean overMin = (enduranceLevel + (value * k)) < 0;
+            boolean overMax = (enduranceLevel + (value * k)) > maxEndurance;
+            if ((!overMin) && (!overMax)) {
+                dataManager.set(EnduranceData, enduranceLevel + (value * k));
+            } else if (overMin) {
+                dataManager.set(EnduranceData, 0f);
+            } else {
+                dataManager.set(EnduranceData, maxEndurance);
             }
         }
     }

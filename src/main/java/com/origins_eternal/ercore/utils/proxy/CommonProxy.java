@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.io.IOException;
 
 import static com.origins_eternal.ercore.ERCore.packetHandler;
-import static com.origins_eternal.ercore.utils.registry.FluidRegister.registerFluids;
+import static com.origins_eternal.ercore.utils.registry.ContentRegister.registerFluids;
 import static com.origins_eternal.ercore.utils.registry.MaterialRegister.preTinker;
 import static com.origins_eternal.ercore.utils.registry.RecipeRegister.registerRecipes;
 
