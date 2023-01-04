@@ -165,7 +165,7 @@ public class CommonEvent {
                                 }
                             }
                         } else if ((player.getAir() >= 300) && (!tags.contains("jump")) && (!tags.contains("break")) && (!tags.contains("swim")) && (!tags.contains("sprint"))) {
-                            if ((player.onGround) && (player.isPlayerSleeping())) {
+                            if ((player.onGround) && (!player.isPlayerSleeping())) {
                                 setFloatTags(player, 0.03f);
                             } else if (tags.contains("rest")) {
                                 setFloatTags(player, 0.01f);
