@@ -4,7 +4,6 @@ import com.origins_eternal.ercore.config.Config;
 import com.origins_eternal.ercore.content.block.Blocks;
 import com.origins_eternal.ercore.content.block.FluidBlocks;
 import com.origins_eternal.ercore.content.block.Ores;
-import com.origins_eternal.ercore.content.fluid.Fluids;
 import com.origins_eternal.ercore.content.item.Blueprints;
 import com.origins_eternal.ercore.content.item.Items;
 import net.minecraft.block.Block;
@@ -17,8 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,10 +46,8 @@ public class ContentRegister {
                 OreDictionary.registerOre("ore" + oredictname, ore);
             }
         }
-        if (Config.fluids) {
-            for (Block fluidblock : FluidBlocks.FLUIDBLOCKS) {
-                event.getRegistry().register(fluidblock);
-            }
+        for (Block fluidblock : FluidBlocks.FLUIDBLOCKS) {
+            event.getRegistry().register(fluidblock);
         }
     }
 
@@ -145,14 +140,5 @@ public class ContentRegister {
     public static void registerModels(ModelRegistryEvent event) {
         registerModels();
         registerFluidModels();
-    }
-
-    public static void registerFluids() {
-        if (Config.fluids) {
-            for (Fluid fluid : Fluids.FLUIDS) {
-                FluidRegistry.registerFluid(fluid);
-                FluidRegistry.addBucketForFluid(fluid);
-            }
-        }
     }
 }
