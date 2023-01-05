@@ -128,17 +128,12 @@ public class CommonEvent {
                             player.removeTag("rest");
                         } else if ((checkStatus(player).equals("tired")) && (!player.isPlayerSleeping())) {
                             player.setSprinting(false);
-                            if (!tags.contains("rest")) {
-                                if ((!player.isPotionActive(MobEffects.MINING_FATIGUE)) || (!player.isPotionActive(MobEffects.WEAKNESS)) || (!player.isPotionActive(MobEffects.SLOWNESS))) {
-                                    packetHandler.sendToServer(new TiredMessage());
-                                }
+                            if ((!player.isPotionActive(MobEffects.MINING_FATIGUE)) || (!player.isPotionActive(MobEffects.WEAKNESS)) || (!player.isPotionActive(MobEffects.SLOWNESS))) {
+                                packetHandler.sendToServer(new TiredMessage());
                             }
                         } else if (checkStatus(player).equals("exhausted")) {
                             if (!tags.contains("rest")) {
                                 player.addTag("rest");
-                                player.removePotionEffect(MobEffects.WEAKNESS);
-                                player.removePotionEffect(MobEffects.MINING_FATIGUE);
-                                player.removePotionEffect(MobEffects.SLOWNESS);
                                 BlockPos blockPos = new BlockPos(player);
                                 player.trySleep(blockPos);
                             }

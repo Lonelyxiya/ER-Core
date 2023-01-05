@@ -143,6 +143,7 @@ public class Utils {
             float enduranceLevel = dataManager.get(EnduranceData);
             float food = 1;
             float health = 1;
+            float k = 1;
             if (!tags.contains("rest")) {
                 if (value < 0) {
                     if (foodLevel <= maxFoodLevel) {
@@ -155,8 +156,10 @@ public class Utils {
                     }
                     health = healthLevel / maxHealth;
                 }
+                k = food * health;
+            } else {
+                k = Config.endurance / 20;
             }
-            float k = food * health;
             boolean overMin = (enduranceLevel + (value * k)) < 0;
             boolean overMax = (enduranceLevel + (value * k)) > maxEndurance;
             if ((!overMin) && (!overMax)) {

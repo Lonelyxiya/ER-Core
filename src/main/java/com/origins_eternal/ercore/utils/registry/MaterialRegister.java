@@ -1,5 +1,6 @@
 package com.origins_eternal.ercore.utils.registry;
 
+import com.origins_eternal.ercore.config.Config;
 import com.origins_eternal.ercore.content.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.util.text.TextFormatting;

@@ -26,7 +26,9 @@ public class CommonProxy {
         registerFluids();
         Config.registerConfig(event);
         if (Loader.isModLoaded("tconstruct")) {
-            preTinker();
+            if (Config.fluids) {
+                preTinker();
+            }
         }
         GameRegistry.registerWorldGenerator(new GenOres(), 0);
         packetHandler.registerMessage(KeyHandler.class, KeyMessage.class, 0, Side.SERVER);
