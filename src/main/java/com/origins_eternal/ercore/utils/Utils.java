@@ -27,8 +27,8 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
-import static com.origins_eternal.ercore.event.ClientEvent.EnduranceData;
 import static com.origins_eternal.ercore.event.ClientEvent.ContraData;
+import static com.origins_eternal.ercore.event.ClientEvent.EnduranceData;
 
 public class Utils {
     public static boolean checkChinese() {
@@ -134,31 +134,19 @@ public class Utils {
             float origin = (float) ((Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel) * 0.32);
             dataManager.register(EnduranceData, origin);
             player.addTag(registerData);
-        } else {
+        } else if (value != 0) {
             float foodLevel = player.getFoodStats().getFoodLevel();
             float maxFoodLevel = 20;
             float healthLevel = player.getHealth();
             float maxHealth = player.getMaxHealth();
             float maxEndurance = Config.endurance + maxHealth - 20 + player.experienceLevel;
             float enduranceLevel = dataManager.get(EnduranceData);
-            float food = 1;
-            float health = 1;
-            float k = 1;
-            if (!tags.contains("rest")) {
-                if (value < 0) {
-                    if (foodLevel <= maxFoodLevel) {
-                        food = (2 - (foodLevel / maxFoodLevel));
-                    }
-                    health = (2 - (healthLevel / maxHealth));
-                } else if (value > 0) {
-                    if (foodLevel <= maxFoodLevel) {
-                        food = healthLevel / maxHealth;
-                    }
-                    health = healthLevel / maxHealth;
-                }
-                k = food * health;
+            double x = - (foodLevel / maxFoodLevel) - (healthLevel / maxHealth);
+            float k = (float) (Math.pow(2, x) - 0.25);
+            if (value > 0) {
+                k = 1 - k;
             } else {
-                k = Config.endurance / 20;
+                k = 1 + k;
             }
             boolean overMin = (enduranceLevel + (value * k)) < 0;
             boolean overMax = (enduranceLevel + (value * k)) > maxEndurance;

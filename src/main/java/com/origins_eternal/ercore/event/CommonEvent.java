@@ -10,7 +10,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -24,7 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Set;
 
-import static com.origins_eternal.ercore.ERCore.*;
+import static com.origins_eternal.ercore.ERCore.MOD_ID;
+import static com.origins_eternal.ercore.ERCore.packetHandler;
 import static com.origins_eternal.ercore.event.ClientEvent.EnduranceData;
 import static com.origins_eternal.ercore.utils.Utils.*;
 
@@ -162,7 +162,7 @@ public class CommonEvent {
                                 }
                             }
                         } else if ((player.getAir() >= 300) && (!tags.contains("jump")) && (!tags.contains("break")) && (!tags.contains("swim")) && (!tags.contains("sprint"))) {
-                            if ((player.onGround) && (!player.isPlayerSleeping())) {
+                            if (player.onGround) {
                                 setFloatTags(player, 0.03f);
                             } else if (tags.contains("rest")) {
                                 setFloatTags(player, 0.01f);

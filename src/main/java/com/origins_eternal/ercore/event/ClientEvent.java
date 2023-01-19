@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiSleepMP;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -44,7 +45,7 @@ public class ClientEvent {
         } else if (RIGHT.isKeyDown()) {
             checkStringTags(player, "R");
             String data = dataManager.get(ContraData);
-            if (data.contains("SUUDDLLRR")) {
+            if (data.contains("SUUDDLRLR")) {
                 packetHandler.sendToServer(new KeyMessage());
                 dataManager.set(ContraData, "S");
             }
@@ -57,12 +58,18 @@ public class ClientEvent {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void Gui(GuiOpenEvent event) {
-        if ((event.getGui() instanceof GuiSleepMP) || (event.getGui() instanceof GuiChat) || (event.getGui() instanceof GuiIngameMenu)) {
-            Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getMinecraft();
+        if (mc.inGameHasFocus) {
             EntityPlayer player = mc.player;
             Set<String> tags = player.getTags();
-            if (tags.contains("rest")) {
-                event.setCanceled(true);
+            if ((event.getGui() instanceof GuiSleepMP) || (event.getGui() instanceof GuiChat) || (event.getGui() instanceof GuiIngameMenu)) {
+                if (tags.contains("rest")) {
+                    event.setCanceled(true);
+                }
+            } else if (event.getGui() instanceof GuiInventory) {
+                if ((tags.contains("jump")) || (tags.contains("break")) || (player.moveForward != 0) || (player.moveStrafing != 0)) {
+                    event.setCanceled(true);
+                }
             }
         }
     }
