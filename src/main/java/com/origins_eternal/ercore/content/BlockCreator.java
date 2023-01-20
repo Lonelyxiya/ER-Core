@@ -11,9 +11,10 @@ import java.util.Random;
 
 import static com.origins_eternal.ercore.ERCore.ERCORE;
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
+import static com.origins_eternal.ercore.content.block.Blocks.BLOCKITEMS;
 import static com.origins_eternal.ercore.content.block.Blocks.BLOCKS;
+import static com.origins_eternal.ercore.content.block.Ores.OREITEMS;
 import static com.origins_eternal.ercore.content.block.Ores.ORES;
-import static com.origins_eternal.ercore.content.item.Items.ITEMS;
 
 public class BlockCreator extends Block {
     public BlockCreator(String name, int hardness, int harvestlevel, String toolclass) {
@@ -27,10 +28,11 @@ public class BlockCreator extends Block {
 
         if (name.contains("Ore")) {
             ORES.add(this);
+            OREITEMS.add(new ItemBlock(this).setRegistryName(name.toLowerCase()));
         } else {
             BLOCKS.add(this);
+            BLOCKITEMS.add(new ItemBlock(this).setRegistryName(name.toLowerCase()));
         }
-        ITEMS.add(new ItemBlock(this).setRegistryName(name.toLowerCase()));
     }
 
     @Override

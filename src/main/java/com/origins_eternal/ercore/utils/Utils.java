@@ -75,12 +75,10 @@ public class Utils {
     }
 
     public static void checkStringTags(EntityPlayer player, String letter) {
-        Set<String> tags = player.getTags();
-        String registerData = "string";
         EntityDataManager dataManager = player.getDataManager();
-        if (!tags.contains(registerData)) {
+        if (!player.getTags().contains("string")) {
             dataManager.register(ContraData, "S");
-            player.addTag(registerData);
+            player.addTag("string");
         } else {
             String data = dataManager.get(ContraData);
             dataManager.set(ContraData, data + letter);
@@ -127,37 +125,47 @@ public class Utils {
     }
 
     public static void setFloatTags(EntityPlayer player, Float value) {
-        Set<String> tags = player.getTags();
-        String registerData = "float";
         EntityDataManager dataManager = player.getDataManager();
-        if (!tags.contains(registerData)) {
-            float origin = (float) ((Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel) * 0.32);
+        if (!player.getTags().contains("float")) {
+            float origin = (float) ((Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel) * 0.25);
             dataManager.register(EnduranceData, origin);
-            player.addTag(registerData);
+            player.addTag("float");
         } else if (value != 0) {
+            float enduranceLevel = dataManager.get(EnduranceData);
+            float food = getK(player, "food");
+            float health = 1 - getK(player, "health");
+            if (value > 0) {
+                food = 1 - food;
+            } else {
+                food = 1 + food;
+            }
+            float maxEndurance = (Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel) * health;
+            boolean overMin = (enduranceLevel + (value * food)) < 0;
+            boolean overMax = (enduranceLevel + (value * food)) > maxEndurance;
+            if ((!overMin) && (!overMax)) {
+                dataManager.set(EnduranceData, enduranceLevel + (value * food));
+            } else if (overMin) {
+                dataManager.set(EnduranceData, 0f);
+            }
+        }
+    }
+
+    public static float getK(EntityPlayer player, String type) {
+        float k = 0;
+        if (!player.getTags().contains("rest")) {
             float foodLevel = player.getFoodStats().getFoodLevel();
             float maxFoodLevel = 20;
             float healthLevel = player.getHealth();
             float maxHealth = player.getMaxHealth();
-            float maxEndurance = Config.endurance + maxHealth - 20 + player.experienceLevel;
-            float enduranceLevel = dataManager.get(EnduranceData);
-            double x = - (foodLevel / maxFoodLevel) - (healthLevel / maxHealth);
-            float k = (float) (Math.pow(2, x) - 0.25);
-            if (value > 0) {
-                k = 1 - k;
-            } else {
-                k = 1 + k;
-            }
-            boolean overMin = (enduranceLevel + (value * k)) < 0;
-            boolean overMax = (enduranceLevel + (value * k)) > maxEndurance;
-            if ((!overMin) && (!overMax)) {
-                dataManager.set(EnduranceData, enduranceLevel + (value * k));
-            } else if (overMin) {
-                dataManager.set(EnduranceData, 0f);
-            } else {
-                dataManager.set(EnduranceData, maxEndurance);
+            double x = -2 * (foodLevel / maxFoodLevel);
+            double y = -2 * (healthLevel / maxHealth);
+            if (type.equals("health")) {
+                k = (float) (Math.pow(2, y) - 0.25);
+            } else if (type.equals("food")) {
+                k = (float) (Math.pow(2, x) - 0.25);
             }
         }
+        return k;
     }
 
     public static IBlockState getBlockstate(String id, Block origin) {

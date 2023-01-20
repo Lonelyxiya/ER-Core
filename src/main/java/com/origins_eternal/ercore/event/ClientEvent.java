@@ -1,12 +1,14 @@
 package com.origins_eternal.ercore.event;
 
+import com.origins_eternal.ercore.ERCore;
 import com.origins_eternal.ercore.message.KeyMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiSleepMP;
-import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -57,17 +59,13 @@ public class ClientEvent {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public static void Gui(GuiOpenEvent event) {
+    public static void GuiOpen(GuiOpenEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.inGameHasFocus) {
             EntityPlayer player = mc.player;
             Set<String> tags = player.getTags();
             if ((event.getGui() instanceof GuiSleepMP) || (event.getGui() instanceof GuiChat) || (event.getGui() instanceof GuiIngameMenu)) {
                 if (tags.contains("rest")) {
-                    event.setCanceled(true);
-                }
-            } else if (event.getGui() instanceof GuiInventory) {
-                if ((tags.contains("jump")) || (tags.contains("break")) || (player.moveForward != 0) || (player.moveStrafing != 0)) {
                     event.setCanceled(true);
                 }
             }

@@ -26,7 +26,9 @@ import javax.annotation.Nonnull;
 import java.util.Objects;
 
 import static com.origins_eternal.ercore.ERCore.MOD_ID;
+import static com.origins_eternal.ercore.content.block.Blocks.BLOCKITEMS;
 import static com.origins_eternal.ercore.content.block.FluidBlocks.FLUIDBLOCKS;
+import static com.origins_eternal.ercore.content.block.Ores.OREITEMS;
 
 @Mod.EventBusSubscriber
 public class ContentRegister {
@@ -55,8 +57,8 @@ public class ContentRegister {
     public static void registerItems(RegistryEvent.Register<Item> event) {
         if (Config.items) {
             for (Item item : Items.ITEMS) {
-                event.getRegistry().register(item);
                 String itemname = item.getTranslationKey();
+                event.getRegistry().register(item);
                 if (itemname.contains("ingot")) {
                     String ingotname = itemname.replaceAll("_", "").replace("ingot", "");
                     String oredictname = ingotname.substring(12, 13).toUpperCase() + ingotname.substring(13);
@@ -68,6 +70,16 @@ public class ContentRegister {
                 } else if (!(itemname.contains("_"))) {
                     OreDictionary.registerOre(itemname, item);
                 }
+            }
+        }
+        if (Config.ores) {
+            for (Item oreitem: OREITEMS) {
+                event.getRegistry().register(oreitem);
+            }
+        }
+        if (Config.blocks) {
+            for (Item blockitem: BLOCKITEMS) {
+                event.getRegistry().register(blockitem);
             }
         }
         if (Config.blueprints) {
@@ -94,6 +106,16 @@ public class ContentRegister {
         if (Config.items) {
             for (Item item : Items.ITEMS) {
                 ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), "inventory"));
+            }
+        }
+        if (Config.ores) {
+            for (Item oreitem : OREITEMS) {
+                ModelLoader.setCustomModelResourceLocation(oreitem, 0, new ModelResourceLocation(Objects.requireNonNull(oreitem.getRegistryName()), "inventory"));
+            }
+        }
+        if (Config.blocks) {
+            for (Item blockitem : BLOCKITEMS) {
+                ModelLoader.setCustomModelResourceLocation(blockitem, 0, new ModelResourceLocation(Objects.requireNonNull(blockitem.getRegistryName()), "inventory"));
             }
         }
         if (Config.blueprints) {

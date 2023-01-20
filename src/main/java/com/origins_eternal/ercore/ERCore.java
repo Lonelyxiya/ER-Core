@@ -19,7 +19,6 @@ import java.io.IOException;
 
 @Mod(modid = ERCore.MOD_ID, name = ERCore.MOD_NAME, version = ERCore.VERSION, dependencies = "after:tconstruct@[1.12-2.7.2.15,);")
 public class ERCore {
-
 	public static File config;
 
 	public static final String MOD_ID = "ercore";
