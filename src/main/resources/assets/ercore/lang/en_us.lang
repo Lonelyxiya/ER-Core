@@ -80,3 +80,9 @@ fluid.ercore.tungsten_steel=Molten Tungsten Steel
 
 material.tungsten_steel.name=Tungsten Steel
 material.obsidian_magic.name=Magic Obsidian
+
+key.category.ercore=Contra
+key.description.up.ercore=Up
+key.description.down.ercore=Down
+key.description.left.ercore=Left
+key.description.right.ercore=Right

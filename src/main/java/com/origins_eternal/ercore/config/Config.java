@@ -39,7 +39,6 @@ public class Config {
     public static int tungstenChance;
     public static int tungstenMinHeight;
     public static int tungstenMaxHeight;
-    public static float endurance;
     public static boolean enableEndurance;
     public static boolean showbar;
     public static boolean ores;
@@ -53,11 +52,10 @@ public class Config {
         config = new Configuration(file);
 
         String endurancecategory = "Endurance";
-        config.addCustomCategoryComment(endurancecategory, "Custom your endurance, it can be closed if you feel terrible!");
+        config.addCustomCategoryComment(endurancecategory, "Here are endurance options, it can be closed if you feel terrible!");
 
         enableEndurance = config.getBoolean("Enable Endurance", endurancecategory, true, "Enable or Disable Endurance");
         showbar = config.getBoolean("Show Overlay Bar", endurancecategory, true, "Whether to Show Endurance Bar or Not");
-        endurance = config.getFloat("Initial Endurance Value", endurancecategory, 20, 10, 40, "Set Initial Endurance Value");
 
         String contentcategory = "Content";
         config.addCustomCategoryComment(contentcategory, "Custom the blocks or items which are added by the mod, they will not be added by default.");

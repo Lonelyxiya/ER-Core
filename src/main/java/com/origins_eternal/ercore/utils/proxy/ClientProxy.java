@@ -20,10 +20,10 @@ public class ClientProxy extends CommonProxy{
     public static KeyBinding UP, DOWN, LEFT, RIGHT;
 
     public static void registerKeys() {
-        ClientRegistry.registerKeyBinding(UP = new KeyBinding("Up", Keyboard.KEY_UP, "key.category." + MOD_ID) );
-        ClientRegistry.registerKeyBinding(DOWN = new KeyBinding("Down", Keyboard.KEY_DOWN, "key.category." + MOD_ID) );
-        ClientRegistry.registerKeyBinding(LEFT = new KeyBinding("Left", Keyboard.KEY_LEFT, "key.category." + MOD_ID) );
-        ClientRegistry.registerKeyBinding(RIGHT = new KeyBinding("Right", Keyboard.KEY_RIGHT, "key.category." + MOD_ID) );
+        ClientRegistry.registerKeyBinding(UP = new KeyBinding("key.description.up." + MOD_ID, Keyboard.KEY_UP, "key.category." + MOD_ID) );
+        ClientRegistry.registerKeyBinding(DOWN = new KeyBinding("key.description.down." + MOD_ID, Keyboard.KEY_DOWN, "key.category." + MOD_ID) );
+        ClientRegistry.registerKeyBinding(LEFT = new KeyBinding("key.description.left." + MOD_ID, Keyboard.KEY_LEFT, "key.category." + MOD_ID) );
+        ClientRegistry.registerKeyBinding(RIGHT = new KeyBinding("key.description.right." + MOD_ID, Keyboard.KEY_RIGHT, "key.category." + MOD_ID) );
     }
 
     @Override

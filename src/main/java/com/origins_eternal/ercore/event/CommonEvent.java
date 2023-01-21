@@ -118,11 +118,12 @@ public class CommonEvent {
                     Set<String> tags = player.getTags();
                     if (tags.contains("float")) {
                         EntityDataManager dataManager = player.getDataManager();
-                        float max = Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel;
-                        float value = dataManager.get(EnduranceData);
-                        if (value > max) {
-                            dataManager.set(EnduranceData, max);
+                        float max = 20;
+                        float maxHealth = player.getMaxHealth();
+                        if (maxHealth >= 20) {
+                            max = maxHealth;
                         }
+                        float value = dataManager.get(EnduranceData);
                         if ((checkStatus(player).equals("spirit")) && (player.isPlayerSleeping())) {
                             player.wakeUpPlayer(false, false, false);
                             player.removeTag("rest");
@@ -161,7 +162,7 @@ public class CommonEvent {
                                     setFloatTags(player, 0.01f);
                                 }
                             }
-                        } else if ((player.getAir() >= 300) && (!tags.contains("jump")) && (!tags.contains("break")) && (!tags.contains("swim")) && (!tags.contains("sprint"))) {
+                        } else if ((value != max) && (player.getAir() >= 300) && (!tags.contains("jump")) && (!tags.contains("break")) && (!tags.contains("swim")) && (!tags.contains("sprint"))) {
                             if (player.onGround) {
                                 setFloatTags(player, 0.03f);
                             } else if (tags.contains("rest")) {

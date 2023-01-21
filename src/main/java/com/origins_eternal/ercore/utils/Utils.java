@@ -91,17 +91,20 @@ public class Utils {
         String registerData = "float";
         EntityDataManager dataManager = player.getDataManager();
         float maxHealth = player.getMaxHealth();
-        float max = Config.endurance + maxHealth - 20 + player.experienceLevel;
+        float max = 20;
+        if (maxHealth >= 20) {
+            max = maxHealth;
+        }
         if (tags.contains(registerData)) {
             float value = dataManager.get(EnduranceData);
             float weakness = value / max;
-            if (weakness < 0.01) {
+            if (weakness <= 0.01) {
                 status = "exhausted";
-            } else if (weakness <= 0.25) {
+            } else if (weakness < 0.25) {
                 status = "tired";
-            } else if (weakness <=0.99) {
+            } else if (weakness < 0.99) {
                 status = "normal";
-            } else if (weakness > 0.99) {
+            } else if (weakness >= 0.99) {
                 status = "spirit";
             }
 
@@ -126,26 +129,37 @@ public class Utils {
 
     public static void setFloatTags(EntityPlayer player, Float value) {
         EntityDataManager dataManager = player.getDataManager();
+        float max = 20;
+        float maxHealth = player.getMaxHealth();
+        if (maxHealth >= 20) {
+            max = maxHealth;
+        }
         if (!player.getTags().contains("float")) {
-            float origin = (float) ((Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel) * 0.25);
+            float origin = (float) (max * 0.25);
             dataManager.register(EnduranceData, origin);
             player.addTag("float");
         } else if (value != 0) {
             float enduranceLevel = dataManager.get(EnduranceData);
             float food = getK(player, "food");
             float health = 1 - getK(player, "health");
+            float experience = getK(player, "experience");
             if (value > 0) {
                 food = 1 - food;
+                experience = 1 + experience;
             } else {
                 food = 1 + food;
+                experience = 1 - experience;
             }
-            float maxEndurance = (Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel) * health;
-            boolean overMin = (enduranceLevel + (value * food)) < 0;
-            boolean overMax = (enduranceLevel + (value * food)) > maxEndurance;
-            if ((!overMin) && (!overMax)) {
-                dataManager.set(EnduranceData, enduranceLevel + (value * food));
-            } else if (overMin) {
+            float k = (experience + food) / 2;
+            float maxEndurance = max * health;
+            boolean overMin = (enduranceLevel + (value * k)) < 0;
+            boolean overMax = (enduranceLevel + (value * k)) > maxEndurance;
+            if (overMin) {
                 dataManager.set(EnduranceData, 0f);
+            } else if (overMax) {
+                dataManager.set(EnduranceData, maxEndurance);
+            } else {
+                dataManager.set(EnduranceData, enduranceLevel + (value * k));
             }
         }
     }
@@ -157,12 +171,23 @@ public class Utils {
             float maxFoodLevel = 20;
             float healthLevel = player.getHealth();
             float maxHealth = player.getMaxHealth();
+            float experienceLevel = player.experienceLevel;
+            if (experienceLevel > 500) {
+                experienceLevel = 500;
+            }
             double x = -2 * (foodLevel / maxFoodLevel);
             double y = -2 * (healthLevel / maxHealth);
-            if (type.equals("health")) {
-                k = (float) (Math.pow(2, y) - 0.25);
-            } else if (type.equals("food")) {
-                k = (float) (Math.pow(2, x) - 0.25);
+            double z = 2 * experienceLevel + 1;
+            switch (type) {
+                case "health":
+                    k = (float) (Math.pow(2, y) - 0.25);
+                    break;
+                case "food":
+                    k = (float) (Math.pow(2, x) - 0.25);
+                    break;
+                case "experience":
+                    k = (float) (Math.log(z) * 0.25);
+                    break;
             }
         }
         return k;

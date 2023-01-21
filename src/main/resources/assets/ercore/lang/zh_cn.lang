@@ -80,3 +80,9 @@ fluid.ercore.tungsten_steel=熔融钨钢
 
 material.tungsten_steel.name=钨钢
 material.obsidian_magic.name=魔力黑曜石
+
+key.category.ercore=魂斗罗
+key.description.up.ercore=上
+key.description.down.ercore=下
+key.description.left.ercore=左
+key.description.right.ercore=右

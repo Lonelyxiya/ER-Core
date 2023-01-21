@@ -29,7 +29,11 @@ public class Overlay extends Gui {
                     if (tags.contains("float")) {
                         mc.renderEngine.bindTexture(gui);
                         EntityDataManager dataManager = player.getDataManager();
-                        float max = Config.endurance + player.getMaxHealth() - 20 + player.experienceLevel;
+                        float max = 20;
+                        float maxHealth = player.getMaxHealth();
+                        if (maxHealth >= 20) {
+                            max = maxHealth;
+                        }
                         float value = dataManager.get(EnduranceData);
                         float bar = 82;
                         float percent = 1 - (value / max);
